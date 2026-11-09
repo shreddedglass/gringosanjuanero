@@ -1,0 +1,132 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import TikTok from '../../components/TikTok.astro';
+import Icon from '../../components/Icon.astro';
+import { getPosts, formatDate, readingTime, mapsLink, NOMBRE_ETIQUETA, ETIQUETA_A_PAGINA } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+
+const { post, posts } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+const related = posts.filter((p) => p.id !== post.id && p.data.etiqueta === d.etiqueta).slice(0, 3);
+const otros = related.length < 3 ? posts.filter((p) => p.id !== post.id && !related.includes(p)).slice(0, 3 - related.length) : [];
+const relacionados = [...related, ...otros];
+const facts = [
+  ['Dónde queda', d.lugar], ['Cómo llegar', d.comoLlegar], ['Costo', d.costo], ['Mejor momento', d.mejorMomento],
+].filter(([, v]) => v) as [string, string][];
+const mapa = mapsLink(d.mapa?.startsWith('http') ? undefined : d.mapa, d.mapa?.startsWith('http') ? d.mapa : undefined);
+const paginaHref = { explorar: '/donde-explorar/', hospedarse: '/donde-hospedarse/', comer: '/donde-comer/' }[ETIQUETA_A_PAGINA[d.etiqueta]];
+const paginaNombre = { explorar: 'Dónde Explorar', hospedarse: 'Dónde Hospedarse', comer: 'Dónde Comer' }[ETIQUETA_A_PAGINA[d.etiqueta]];
+
+const jsonld = {
+  '@context': 'https://schema.org', '@type': 'BlogPosting', headline: d.title, description: d.resumen,
+  datePublished: d.date.toISOString(), inLanguage: 'es',
+  image: d.portada ? new URL(d.portada, Astro.site).toString() : undefined,
+  author: { '@type': 'Person', name: 'El Gringo Sanjuanero', url: Astro.site?.toString() },
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).toString(),
+};
+---
+<Layout title={d.title} description={d.resumen} image={d.portada} active="blog" type="article" jsonld={jsonld}>
+  <style>
+    .head { max-width: 860px; padding-top: 40px; padding-bottom: 32px; display: flex; flex-direction: column; gap: 18px; align-items: flex-start; }
+    .head h1 { font-weight: 800; font-size: clamp(38px, 5vw, 62px); line-height: 1.02; letter-spacing: -0.02em; }
+    .byline { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; color: var(--gris); font-size: 16px; }
+    .byline .me { display: flex; align-items: center; gap: 10px; color: var(--tinta); font-weight: 700; }
+    .byline .me img { width: 40px; height: 40px; padding: 3px; border: 2px solid var(--tinta); }
+    .hero-img { max-width: 1100px; padding-bottom: 48px; }
+    .hero-img > div { height: clamp(260px, 45vw, 520px); border-radius: 28px; border: 4px solid var(--tinta); overflow: hidden; box-shadow: 10px 10px 0 var(--tinta); }
+    .body { max-width: 860px; padding-bottom: 64px; display: flex; flex-direction: column; gap: 36px; }
+    .facts { background: var(--sol); border: 3px solid var(--tinta); border-radius: 24px; padding: 28px; box-shadow: 6px 6px 0 var(--tinta); display: flex; flex-direction: column; gap: 18px; align-items: flex-start; }
+    .facts h2 { font-weight: 800; font-size: 26px; }
+    .facts dl { margin: 0; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; font-size: 16px; line-height: 1.5; }
+    .facts dt { font-weight: 700; }
+    .facts dd { margin: 0; }
+    .tip { padding: 24px 28px; background: #fff; border: 3px solid var(--tinta); border-radius: 22px; display: flex; gap: 18px; align-items: center; }
+    .tip img { width: 72px; flex-shrink: 0; }
+    .tip strong { font-family: var(--display); font-size: 20px; display: block; }
+    .share { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 24px; border-top: 2px solid #E4DAC4; }
+    .back-to { display: flex; flex-wrap: wrap; gap: 12px; }
+  </style>
+
+  <section class="wrap head">
+    <a href="/blog/" style="font-weight: 700; font-size: 16px; text-decoration: none;">← Volver al blog</a>
+    <span class={`chip chip-${d.etiqueta}`} style="font-size: 15px;">{NOMBRE_ETIQUETA[d.etiqueta]}</span>
+    <h1>{d.title}</h1>
+    <div class="byline">
+      <span class="me"><img class="logo-circle" src="/images/logo.png" alt="" width="40" height="40" /> El Gringo Sanjuanero</span>
+      <span aria-hidden="true">•</span>
+      <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time>
+      <span aria-hidden="true">•</span>
+      <span>{readingTime(post.body)} min de lectura</span>
+    </div>
+  </section>
+
+  {d.portada && (
+    <section class="wrap hero-img"><div><Photo src={d.portada} alt={d.title} tone={d.etiqueta} eager /></div></section>
+  )}
+
+  <section class="wrap body">
+    {(facts.length > 0 || mapa) && (
+      <div class="facts">
+        <h2>Datos rápidos</h2>
+        {facts.length > 0 && <dl>{facts.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>}
+        {mapa && <a class="btn btn-dark btn-sm" href={mapa} target="_blank" rel="noopener"><Icon name="pin" size={16} /> Ver en Google Maps</a>}
+      </div>
+    )}
+
+    <article class="prose"><Content /></article>
+
+    {d.consejo && (
+      <aside class="tip">
+        <img src="/images/logo.png" alt="" width="72" />
+        <div><strong>Consejo del gringo</strong><span>{d.consejo}</span></div>
+      </aside>
+    )}
+
+    <TikTok url={d.video} />
+
+    <div class="share">
+      <strong>Compártelo:</strong>
+      <a class="btn btn-light btn-sm" href={`https://wa.me/?text=${encodeURIComponent(d.title + ' ' + new URL(Astro.url.pathname, Astro.site))}`} target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn btn-light btn-sm" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(new URL(Astro.url.pathname, Astro.site).toString())}`} target="_blank" rel="noopener">Facebook</a>
+      <button class="btn btn-light btn-sm" type="button" id="copiar">Copiar enlace</button>
+    </div>
+
+    <div class="back-to">
+      <a class="btn btn-primary" href={paginaHref}>Ver más en {paginaNombre} <Icon name="arrow" /></a>
+    </div>
+  </section>
+
+  {relacionados.length > 0 && (
+    <section style="background: var(--rio); color: #fff; padding: 72px 0;">
+      <div class="wrap" style="display: flex; flex-direction: column; gap: 28px;">
+        <h2 style="font-weight: 800; font-size: clamp(30px, 3.4vw, 42px);">Sigue explorando</h2>
+        <div class="grid">
+          {relacionados.map((p) => (
+            <a class="card" href={`/blog/${p.id}/`}>
+              <div class="card-media" style="height: 170px;"><Photo src={p.data.portada} alt={p.data.title} tone={p.data.etiqueta} /></div>
+              <div class="card-body">
+                <span class={`chip chip-${p.data.etiqueta}`}>{NOMBRE_ETIQUETA[p.data.etiqueta]}</span>
+                <h3 class="card-title" style="font-size: 22px;">{p.data.title}</h3>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <script>
+    const b = document.getElementById('copiar');
+    b?.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(location.href); b.textContent = '¡Copiado!'; }
+      catch { b.textContent = location.href; }
+    });
+  </script>
+</Layout>

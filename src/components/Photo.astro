@@ -1,0 +1,8 @@
+---
+import Icon from './Icon.astro';
+interface Props { src?: string; alt: string; tone?: string; label?: string; eager?: boolean }
+const { src, alt, tone = 'explorar', label = 'Foto próximamente', eager = false } = Astro.props;
+---
+{src
+  ? <img class="cover" src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  : <div class={`ph ph-${tone} cover`} role="img" aria-label={alt}><Icon name="photo" size={36} /><span>{label}</span></div>}

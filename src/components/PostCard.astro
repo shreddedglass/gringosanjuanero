@@ -1,0 +1,17 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Photo from './Photo.astro';
+import { formatDate, readingTime, NOMBRE_ETIQUETA } from '../lib/utils';
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props;
+const d = post.data;
+---
+<a class="card" href={`/blog/${post.id}/`} data-etiqueta={d.etiqueta}>
+  <div class="card-media"><Photo src={d.portada} alt={d.title} tone={d.etiqueta} /></div>
+  <div class="card-body">
+    <span class={`chip chip-${d.etiqueta}`}>{NOMBRE_ETIQUETA[d.etiqueta]}</span>
+    <h3 class="card-title">{d.title}</h3>
+    <p style="color: var(--gris); font-size: 16px;">{d.resumen}</p>
+    <span class="card-meta">{formatDate(d.date)} • {readingTime(post.body)} min</span>
+  </div>
+</a>

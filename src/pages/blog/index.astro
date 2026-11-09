@@ -1,0 +1,105 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/PostCard.astro';
+import Photo from '../../components/Photo.astro';
+import Icon from '../../components/Icon.astro';
+import site from '../../data/site.json';
+import { getPosts, formatDate, readingTime, NOMBRE_ETIQUETA } from '../../lib/utils';
+
+const posts = await getPosts();
+const [featured, ...rest] = posts;
+const etiquetas = ['explorar', 'alojamiento', 'comida'] as const;
+---
+<Layout title="Blog: Historias del Sur" description="Guías, aventuras y consejos de cada sitio que visita el Gringo Sanjuanero en el sur dominicano." active="blog">
+  <style>
+    .title-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 32px; padding-top: 48px; padding-bottom: 32px; }
+    .title-row > div { flex: 1 1 520px; display: flex; flex-direction: column; gap: 16px; }
+    .title-row .lead { max-width: 44ch; }
+    .face { width: 150px; transform: rotate(8deg); filter: drop-shadow(5px 6px 0 var(--tinta)); }
+    .pills { display: flex; flex-wrap: wrap; gap: 10px; padding-bottom: 40px; }
+    .pill { padding: 10px 20px; min-height: 44px; border-radius: 999px; background: #fff; color: var(--tinta); font-family: var(--body); font-weight: 700; font-size: 16px; border: 2px solid var(--tinta); cursor: pointer; }
+    .pill[aria-pressed="true"] { background: var(--tinta); color: #fff; }
+    .featured { display: flex; flex-wrap: wrap; border-width: 4px; border-radius: 28px; box-shadow: 10px 10px 0 var(--tinta); }
+    .featured .media { flex: 1 1 480px; min-height: 360px; position: relative; border-right: 4px solid var(--tinta); }
+    .featured .body { flex: 1 1 420px; padding: 40px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 16px; }
+    .featured h2 { font-weight: 800; font-size: clamp(30px, 3vw, 42px); line-height: 1.08; }
+    .new { position: absolute; top: 20px; left: 20px; padding: 6px 14px; border-radius: 999px; background: var(--sol); font-weight: 800; font-size: 14px; border: 2px solid var(--tinta); transform: rotate(-3deg); }
+    .fake-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; background: var(--barro); color: #fff; font-weight: 700; border: 3px solid var(--tinta); }
+    @media (max-width: 900px) { .featured .media { border-right: 0; border-bottom: 4px solid var(--tinta); } .featured .body { padding: 28px; } }
+    .empty { padding: 48px; border: 3px dashed var(--tinta); border-radius: 24px; text-align: center; color: var(--gris); }
+    [hidden] { display: none !important; }
+  </style>
+
+  <section class="wrap title-row">
+    <div>
+      <span class="eyebrow">El blog</span>
+      <h1 class="h-hero">Historias del <span class="highlight">Sur</span></h1>
+      <p class="lead">Guías, aventuras y consejos de cada sitio que visito: cómo llegar, qué llevar y si de verdad vale la pena.</p>
+    </div>
+    <img class="face" src="/images/logo.png" alt="" width="150" />
+  </section>
+
+  {posts.length === 0 ? (
+    <section class="wrap" style="padding-bottom: 96px;"><p class="empty">Muy pronto: los primeros posts del blog.</p></section>
+  ) : (
+    <>
+      <div class="wrap pills" role="group" aria-label="Filtrar por categoría">
+        <button class="pill" type="button" data-filtro="" aria-pressed="true">Todos</button>
+        {etiquetas.map((e) => <button class="pill" type="button" data-filtro={e} aria-pressed="false">{NOMBRE_ETIQUETA[e]}</button>)}
+      </div>
+
+      <section class="wrap" style="padding-bottom: 56px;" id="destacado">
+        <a class="card featured" href={`/blog/${featured.id}/`} data-etiqueta={featured.data.etiqueta}>
+          <div class="media">
+            <Photo src={featured.data.portada} alt={featured.data.title} tone={featured.data.etiqueta} eager />
+            <span class="new">Lo más nuevo</span>
+          </div>
+          <div class="body">
+            <span class={`chip chip-${featured.data.etiqueta}`}>{NOMBRE_ETIQUETA[featured.data.etiqueta]}</span>
+            <h2>{featured.data.title}</h2>
+            <p style="font-size: 18px; color: var(--texto-suave);">{featured.data.resumen}</p>
+            <span class="card-meta" style="font-size: 15px;">{formatDate(featured.data.date)} • {readingTime(featured.body)} min de lectura</span>
+            <span class="fake-btn">Leer el post <Icon name="arrow" /></span>
+          </div>
+        </a>
+      </section>
+
+      <section class="wrap" style="padding-bottom: 72px; display: flex; flex-direction: column; gap: 28px;">
+        {rest.length > 0 && <h2 style="font-weight: 800; font-size: 34px;">Más aventuras</h2>}
+        <div class="grid" id="lista-posts">{rest.map((p) => <PostCard post={p} />)}</div>
+        <p class="empty" id="sin-posts" hidden>Todavía no hay posts en esta categoría.</p>
+      </section>
+    </>
+  )}
+
+  <section class="wrap" style="padding-bottom: 96px;">
+    <div class="cta-box">
+      <div>
+        <h2>Las aventuras completas están en video</h2>
+        <p>Sígueme en TikTok para ver cada sitio antes de que salga en el blog.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-dark" href={site.tiktok} target="_blank" rel="noopener"><Icon name="music" /> Ir a mi TikTok</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const pills = document.querySelectorAll<HTMLButtonElement>('.pill');
+    const cards = document.querySelectorAll<HTMLElement>('[data-etiqueta]');
+    const empty = document.getElementById('sin-posts');
+    const destacado = document.getElementById('destacado');
+    pills.forEach((pill) => pill.addEventListener('click', () => {
+      const f = pill.dataset.filtro;
+      pills.forEach((p) => p.setAttribute('aria-pressed', String(p === pill)));
+      let visibles = 0;
+      cards.forEach((c) => {
+        const show = !f || c.dataset.etiqueta === f;
+        if (c.closest('#destacado')) { if (destacado) destacado.hidden = !show; }
+        else c.hidden = !show;
+        if (show) visibles++;
+      });
+      if (empty) empty.hidden = visibles > 0;
+    }));
+  </script>
+</Layout>

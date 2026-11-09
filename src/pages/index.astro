@@ -1,0 +1,129 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PostCard from '../components/PostCard.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+import { getPosts, getLugares } from '../lib/utils';
+
+const posts = (await getPosts()).slice(0, 3);
+const lugares = await getLugares();
+const count = (p: string) => lugares.filter((l) => l.data.pagina === p).length;
+
+const paginas = [
+  { href: '/donde-explorar/', titulo: 'Dónde Explorar', texto: 'Saltos, ríos, playas y montañas.', tono: 'explorar', color: 'var(--rio)', n: count('explorar') },
+  { href: '/donde-hospedarse/', titulo: 'Dónde Hospedarse', texto: 'Hoteles, casas de campo y camping.', tono: 'hospedarse', color: 'var(--campo)', n: count('hospedarse') },
+  { href: '/donde-comer/', titulo: 'Dónde Comer', texto: 'Restaurantes, comedores y más.', tono: 'comer', color: 'var(--barro)', n: count('comer') },
+];
+const jsonld = {
+  '@context': 'https://schema.org', '@type': 'WebSite', name: 'Gringo Sanjuanero', url: Astro.site?.toString(),
+  inLanguage: 'es', description: site.descripcion,
+};
+---
+<Layout active="inicio" jsonld={jsonld}>
+  <style>
+    .hero { display: flex; flex-wrap: wrap; align-items: center; gap: 48px; padding-top: 40px; padding-bottom: 72px; }
+    .hero-text { flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+    .badge { align-self: flex-start; display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--rio-claro); color: var(--rio-tinta); font-weight: 700; font-size: 15px; }
+    .hero h1 .sur { color: var(--barro); }
+    .hero .lead { max-width: 34ch; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-art { flex: 1 1 420px; min-width: 0; display: flex; justify-content: center; position: relative; min-height: 460px; }
+    .hero-sun { position: absolute; width: 420px; max-width: 92%; aspect-ratio: 1; border-radius: 50%; background: var(--sol); top: 10px; }
+    .hero-photo { position: relative; margin-top: 50px; width: 360px; max-width: 80%; aspect-ratio: 4 / 5; border-radius: 28px; border: 4px solid var(--tinta); overflow: hidden; transform: rotate(3deg); box-shadow: 8px 8px 0 var(--tinta); background: #CFE9E3; }
+    .hero-face { position: absolute; left: 2%; bottom: -10px; width: 200px; transform: rotate(-8deg); filter: drop-shadow(5px 6px 0 var(--tinta)); }
+    .strip { background: var(--tinta); color: var(--crema); padding: 22px 24px; transform: rotate(-1.2deg); margin: 0 -20px; }
+    .strip div { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 28px; font-family: var(--display); font-weight: 700; font-size: 24px; }
+    .strip i { color: var(--sol); font-style: normal; }
+    .tile { padding: 32px; gap: 14px; justify-content: space-between; min-height: 260px; color: #fff; }
+    .tile h3 { font-size: 34px; font-weight: 800; }
+    .tile p { font-size: 18px; }
+    .tile .go { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 700; }
+    .tile .n { background: rgba(255,255,255,.2); padding: 4px 12px; border-radius: 999px; font-size: 15px; }
+    a.tile:hover { color: #fff; }
+    .about { display: flex; flex-wrap: wrap; align-items: center; gap: 56px; padding-top: 96px; padding-bottom: 96px; }
+    .about-img { flex: 0 1 320px; display: flex; justify-content: center; }
+    .about-img img { width: 280px; height: 280px; padding: 26px; border: 5px solid var(--tinta); box-shadow: 14px 14px 0 0 var(--rio); }
+    .about-text { flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+    .about-text p { font-size: 19px; color: var(--texto-suave); max-width: 52ch; }
+    .empty { padding: 32px; border: 3px dashed var(--tinta); border-radius: 22px; text-align: center; color: var(--gris); }
+  </style>
+
+  <section class="wrap hero">
+    <div class="hero-text">
+      <span class="badge"><Icon name="pin" size={16} /> Desde San Juan de la Maguana</span>
+      <h1 class="h-hero">Conoce el <span class="sur">Sur</span> con el Gringo <span class="highlight">Sanjuanero</span></h1>
+      <p class="lead">{site.heroTexto}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/donde-explorar/">Ver recomendaciones <Icon name="arrow" /></a>
+        <a class="btn btn-light" href="/blog/">Leer el blog</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="hero-sun"></div>
+      <div class="hero-photo">
+        {site.heroFoto
+          ? <img class="cover" src={site.heroFoto} alt="El Gringo Sanjuanero explorando el sur" loading="eager" />
+          : <div class="ph ph-explorar cover"><Icon name="photo" size={40} /><span>Tu foto aquí</span></div>}
+      </div>
+      <img class="hero-face" src="/images/logo.png" alt="" width="200" />
+    </div>
+  </section>
+
+  <section class="strip" aria-label="Lo que encontrarás">
+    <div><span>Saltos</span><i aria-hidden="true">✦</i><span>Ríos</span><i aria-hidden="true">✦</i><span>Playas</span><i aria-hidden="true">✦</i><span>Restaurantes</span><i aria-hidden="true">✦</i><span>Casas de campo</span><i aria-hidden="true">✦</i><span>Hoteles</span></div>
+  </section>
+
+  <section class="wrap sec" style="display: flex; flex-direction: column; gap: 32px;">
+    <div class="section-head">
+      <div><span class="eyebrow">Del blog</span><h2 class="h-section">Lo último que he explorado</h2></div>
+      <a class="more-link" href="/blog/">Ver todos los posts →</a>
+    </div>
+    {posts.length
+      ? <div class="grid">{posts.map((p) => <PostCard post={p} />)}</div>
+      : <p class="empty">Muy pronto: los primeros posts del blog.</p>}
+  </section>
+
+  <section style="background: var(--tinta); padding: 88px 0;">
+    <div class="wrap" style="display: flex; flex-direction: column; gap: 32px;">
+      <div class="section-head">
+        <div><span class="eyebrow" style="color: var(--sol);">Aprobado por el gringo</span><h2 class="h-section" style="color: var(--crema);">Mis recomendaciones</h2></div>
+      </div>
+      <div class="grid">
+        {paginas.map((p) => (
+          <a class="card tile" href={p.href} style={`background: ${p.color};`}>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </div>
+            <div class="go">
+              {p.n > 0 ? <span class="n">{p.n} {p.n === 1 ? 'lugar' : 'lugares'}</span> : <span></span>}
+              <Icon name="arrow" size={28} />
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap about">
+    <div class="about-img"><img class="logo-circle" src="/images/logo.png" alt="El Gringo Sanjuanero" width="280" height="280" loading="lazy" /></div>
+    <div class="about-text">
+      <span class="eyebrow">¿Quién soy?</span>
+      <h2 class="h-section">{site.sobreMiTitulo}</h2>
+      <p>{site.sobreMiTexto}</p>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-bottom: 96px;">
+    <div class="cta-box">
+      <div>
+        <h2>{site.ctaTitulo}</h2>
+        <p>{site.ctaTexto}</p>
+      </div>
+      <div class="cta-actions" style="flex: 0 0 auto;">
+        <a class="btn btn-dark" href={site.tiktok} target="_blank" rel="noopener"><Icon name="music" /> TikTok</a>
+        <a class="btn btn-light" href={site.instagram} target="_blank" rel="noopener"><Icon name="insta" /> Instagram</a>
+      </div>
+    </div>
+  </section>
+</Layout>

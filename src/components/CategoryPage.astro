@@ -1,0 +1,292 @@
+---
+import { render } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Photo from './Photo.astro';
+import PostCard from './PostCard.astro';
+import TikTok from './TikTok.astro';
+import Icon from './Icon.astro';
+import site from '../data/site.json';
+import { getLugares, getPosts, mapsLink, mapsEmbed, PAGINA_A_ETIQUETA, NOMBRE_ETIQUETA } from '../lib/utils';
+
+interface Props {
+  pagina: 'explorar' | 'hospedarse' | 'comer';
+  titulo: string;
+  palabra: string;
+  intro: string;
+  descripcion: string;
+  color: string;
+}
+const { pagina, titulo, palabra, intro, descripcion, color } = Astro.props;
+
+const lugares = await getLugares(pagina);
+const items = await Promise.all(lugares.map(async (l) => ({ l, Content: (await render(l)).Content })));
+const favoritos = items.filter((x) => x.l.data.favorito > 0).sort((a, b) => a.l.data.favorito - b.l.data.favorito).slice(0, 3);
+const etiqueta = PAGINA_A_ETIQUETA[pagina];
+const posts = (await getPosts()).filter((p) => p.data.etiqueta === etiqueta).slice(0, 3);
+
+const uniq = (arr: string[]) => [...new Set(arr.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
+const grupos = [
+  { titulo: 'Lugar', tags: uniq(lugares.map((l) => l.data.pueblo)) },
+  { titulo: 'Tipo', tags: uniq(lugares.map((l) => l.data.tipo)) },
+  { titulo: 'Ideal para', tags: uniq(lugares.flatMap((l) => l.data.etiquetas)) },
+].filter((g) => g.tags.length > 0);
+const tagsDe = (l: (typeof lugares)[number]) => [l.data.pueblo, l.data.tipo, ...l.data.etiquetas].join('|');
+const rot = ['-1.5deg', '1deg', '-0.5deg'];
+
+const jsonld = {
+  '@context': 'https://schema.org', '@type': 'ItemList', name: `${titulo} en el sur dominicano`,
+  itemListElement: lugares.map((l, i) => ({ '@type': 'ListItem', position: i + 1, name: l.data.nombre })),
+};
+---
+<Layout title={`${titulo} en el Sur`} description={descripcion} active={pagina} jsonld={jsonld}>
+  <style define:vars={{ acc: color }}>
+    .title-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 32px; padding-top: 40px; padding-bottom: 40px; }
+    .title-row > div { flex: 1 1 560px; display: flex; flex-direction: column; gap: 16px; }
+    .title-row h1 { font-weight: 800; font-size: clamp(46px, 6.2vw, 84px); line-height: 0.98; letter-spacing: -0.02em; }
+    .title-row h1 span { background: var(--acc); color: #fff; padding: 0 14px; border-radius: 18px; display: inline-block; transform: rotate(-2deg); }
+    .title-row .lead { max-width: 46ch; }
+    .face { width: 150px; transform: rotate(8deg); filter: drop-shadow(5px 6px 0 var(--tinta)); }
+
+    .favs { padding: 72px 0 88px; }
+    .favs-head { text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center; margin-bottom: 40px; }
+    .favs-head h2 { font-weight: 800; font-size: clamp(36px, 4.4vw, 58px); }
+    .fav { border-width: 4px; border-radius: 26px; box-shadow: 8px 8px 0 var(--tinta); text-align: left; padding: 0; font: inherit; cursor: pointer; }
+    .fav .card-media { height: 230px; position: relative; border-bottom-width: 4px; }
+    .fav-badge { position: absolute; top: 16px; left: 16px; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--sol); color: var(--tinta); font-weight: 800; font-size: 14px; border: 2px solid var(--tinta); }
+    .fav .card-title { font-size: 26px; font-weight: 800; }
+
+    .filters { background: #fff; border: 3px solid var(--tinta); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
+    .fgroup { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .fgroup strong { width: 110px; font-size: 15px; color: var(--gris); }
+    .ftag { padding: 8px 16px; min-height: 44px; border-radius: 999px; background: #fff; color: var(--tinta); font-family: var(--body); font-weight: 700; font-size: 15px; border: 2px solid var(--tinta); cursor: pointer; }
+    .ftag[aria-pressed="true"] { background: var(--acc); color: #fff; box-shadow: 3px 3px 0 var(--tinta); }
+    .ftag[aria-pressed="true"]::after { content: ' ✕'; }
+    .fbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; border-top: 2px solid #EFE6D2; padding-top: 16px; }
+    .clear { background: none; border: 0; color: var(--acc); font: 700 15px var(--body); text-decoration: underline; cursor: pointer; min-height: 44px; padding: 0 8px; }
+
+    .lcard { text-align: left; padding: 0; font: inherit; cursor: pointer; border-radius: 20px; box-shadow: 5px 5px 0 var(--tinta); }
+    .lcard .card-media { height: 170px; position: relative; }
+    .lcard .card-body { padding: 18px; gap: 8px; }
+    .lcard .card-title { font-size: 21px; }
+    .town { display: flex; align-items: center; gap: 6px; color: var(--acc); font-size: 15px; font-weight: 700; }
+    .vbadge { position: absolute; bottom: 12px; right: 12px; display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--tinta); color: #fff; font-size: 13px; font-weight: 700; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips .chip { font-size: 13px; padding: 2px 10px; }
+    .empty { padding: 48px 24px; border: 3px dashed var(--tinta); border-radius: 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--gris); }
+    .empty strong { font-family: var(--display); font-size: 24px; color: var(--tinta); }
+    [hidden] { display: none !important; }
+
+    dialog.lugar { padding: 0; border: 4px solid var(--tinta); border-radius: 28px; width: min(940px, calc(100% - 32px)); max-height: 92vh; background: var(--crema); color: var(--tinta); box-shadow: 10px 10px 0 var(--tinta); }
+    dialog.lugar::backdrop { background: rgba(29, 43, 34, 0.65); }
+    .d-media { height: clamp(220px, 35vw, 320px); position: relative; border-bottom: 4px solid var(--tinta); overflow: hidden; }
+    .d-close { position: absolute; top: 16px; right: 16px; width: 48px; height: 48px; border-radius: 50%; background: #fff; border: 3px solid var(--tinta); color: var(--tinta); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .d-body { padding: 32px; display: flex; flex-direction: column; gap: 28px; }
+    .d-body h2 { font-weight: 800; font-size: clamp(30px, 4vw, 38px); }
+    .d-cols { display: flex; flex-wrap: wrap; gap: 28px; }
+    .d-cols > div { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+    .d-tip { background: #fff; border: 3px solid var(--tinta); border-radius: 18px; padding: 16px 18px; display: flex; gap: 14px; align-items: center; font-size: 16px; }
+    .d-tip img { width: 54px; flex-shrink: 0; }
+    .d-map { height: 220px; border-radius: 18px; border: 3px solid var(--tinta); overflow: hidden; background: #E8E2D0; }
+    .d-map iframe { width: 100%; height: 100%; border: 0; display: block; }
+    @media (max-width: 600px) { .d-body { padding: 22px; } }
+  </style>
+
+  <section class="wrap title-row">
+    <div>
+      <h1>Dónde <span>{palabra}</span></h1>
+      <p class="lead">{intro}</p>
+    </div>
+    <img class="face" src="/images/logo.png" alt="" width="150" />
+  </section>
+
+  {favoritos.length > 0 && (
+    <section class="band-sol favs">
+      <div class="wrap">
+        <div class="favs-head">
+          <span style="font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; font-size: 14px;">Top {favoritos.length}</span>
+          <h2>Los Favoritos del Gringo</h2>
+        </div>
+        <div class="grid" style="gap: 32px;">
+          {favoritos.map(({ l }, i) => (
+            <button type="button" class="card fav" data-abrir={l.id} style={`transform: rotate(${rot[i]});`}>
+              <span class="card-media" style="display: block;">
+                <Photo src={l.data.foto} alt={l.data.nombre} tone={pagina} />
+                <span class="fav-badge"><Icon name="star" size={16} /> Favorito #{l.data.favorito}</span>
+              </span>
+              <span class="card-body">
+                <span class={`chip chip-${pagina}`}>{l.data.tipo}</span>
+                <span class="card-title" style="font-family: var(--display);">{l.data.nombre}</span>
+                <span class="town"><Icon name="pin" size={15} /> {l.data.pueblo}</span>
+                <span style="font-size: 16px;">{l.data.resumen}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="wrap sec" style="display: flex; flex-direction: column; gap: 32px;">
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <span class="eyebrow" style="color: var(--acc);">Todos los lugares</span>
+      <h2 class="h-section">Encuentra tu plan</h2>
+    </div>
+
+    {lugares.length === 0 ? (
+      <div class="empty">
+        <img src="/images/logo.png" alt="" width="90" />
+        <strong>Muy pronto</strong>
+        <span>Estoy visitando los mejores sitios para esta lista.</span>
+      </div>
+    ) : (
+      <>
+        <div class="filters" role="group" aria-label="Filtros">
+          {grupos.map((g) => (
+            <div class="fgroup">
+              <strong>{g.titulo}</strong>
+              {g.tags.map((t) => <button type="button" class="ftag" data-tag={t} aria-pressed="false">{t}</button>)}
+            </div>
+          ))}
+          <div class="fbar">
+            <span style="font-weight: 700;" aria-live="polite">Mostrando <span id="cuenta">{lugares.length}</span> <span id="cuenta-label">{lugares.length === 1 ? 'lugar' : 'lugares'}</span></span>
+            <button type="button" class="clear" id="quitar" hidden>Quitar filtros</button>
+          </div>
+        </div>
+
+        <div class="grid-fill" id="lugares">
+          {lugares.map((l) => (
+            <button type="button" class="card lcard" data-abrir={l.id} data-tags={tagsDe(l)}>
+              <span class="card-media" style="display: block;">
+                <Photo src={l.data.foto} alt={l.data.nombre} tone={pagina} />
+                {l.data.video && <span class="vbadge"><Icon name="play" size={14} /> Video</span>}
+              </span>
+              <span class="card-body">
+                <span class="card-title" style="font-family: var(--display);">{l.data.nombre}</span>
+                <span class="town"><Icon name="pin" size={15} /> {l.data.pueblo}</span>
+                <span style="color: var(--gris); font-size: 15px;">{l.data.resumen}</span>
+                <span class="chips">
+                  <span class={`chip chip-${pagina}`}>{l.data.tipo}</span>
+                  {l.data.etiquetas.map((t) => <span class={`chip chip-${pagina}`}>{t}</span>)}
+                </span>
+              </span>
+            </button>
+          ))}
+        </div>
+
+        <div class="empty" id="sin-resultados" hidden>
+          <img src="/images/logo.png" alt="" width="90" />
+          <strong>Todavía no he visitado un sitio así</strong>
+          <span>Prueba con otros filtros, o déjame tu recomendación en <a href={site.tiktok} target="_blank" rel="noopener">TikTok</a>.</span>
+        </div>
+      </>
+    )}
+  </section>
+
+  {posts.length > 0 && (
+    <section class="band-accent" style={`background: ${color}; padding: 80px 0;`}>
+      <div class="wrap" style="display: flex; flex-direction: column; gap: 28px;">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow" style="color: var(--sol);">Del blog</span>
+            <h2 style="font-weight: 800; font-size: clamp(32px, 3.8vw, 48px);">Artículos para leer antes de ir</h2>
+          </div>
+          <a class="more-link" href="/blog/">Ver todos en el blog →</a>
+        </div>
+        <div class="grid">{posts.map((p) => <PostCard post={p} />)}</div>
+      </div>
+    </section>
+  )}
+
+  {items.map(({ l, Content }) => {
+    const embed = mapsEmbed(l.data.ubicacion ?? `${l.data.nombre}, ${l.data.pueblo}, República Dominicana`);
+    const link = mapsLink(l.data.ubicacion ?? `${l.data.nombre}, ${l.data.pueblo}, República Dominicana`, l.data.mapsUrl);
+    return (
+      <dialog class="lugar" id={l.id} aria-labelledby={`t-${l.id}`}>
+        <div class="d-media">
+          <Photo src={l.data.foto} alt={l.data.nombre} tone={pagina} />
+          <form method="dialog"><button class="d-close" aria-label="Cerrar"><Icon name="close" size={20} /></button></form>
+        </div>
+        <div class="d-body">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <h2 id={`t-${l.id}`}>{l.data.nombre}</h2>
+            <span class="town"><Icon name="pin" size={16} /> {l.data.pueblo}</span>
+            <span class="chips">
+              <span class={`chip chip-${pagina}`}>{l.data.tipo}</span>
+              {l.data.etiquetas.map((t) => <span class={`chip chip-${pagina}`}>{t}</span>)}
+            </span>
+          </div>
+          <div class="d-cols">
+            <div style="flex: 1 1 360px;">
+              <div class="prose" style="font-size: 17px; gap: 14px;">{l.body?.trim() ? <Content /> : <p>{l.data.resumen}</p>}</div>
+              {l.data.consejo && (
+                <div class="d-tip"><img src="/images/logo.png" alt="" width="54" /><span><strong>Consejo del gringo:</strong> {l.data.consejo}</span></div>
+              )}
+            </div>
+            <div style="flex: 1 1 300px;">
+              <div class="d-map"><iframe data-src={embed} title={`Mapa de ${l.data.nombre}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+              <a class="btn btn-dark btn-sm" href={link} target="_blank" rel="noopener"><Icon name="pin" size={16} /> Abrir en Google Maps</a>
+            </div>
+          </div>
+          <TikTok url={l.data.video} lazy />
+        </div>
+      </dialog>
+    );
+  })}
+
+  <script>
+    // Filtros
+    const tags = Array.from(document.querySelectorAll<HTMLButtonElement>('.ftag'));
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('#lugares [data-tags]'));
+    const cuenta = document.getElementById('cuenta');
+    const cuentaLabel = document.getElementById('cuenta-label');
+    const quitar = document.getElementById('quitar');
+    const vacio = document.getElementById('sin-resultados');
+    const sel = new Set<string>();
+
+    function aplicar() {
+      let n = 0;
+      cards.forEach((c) => {
+        const t = (c.dataset.tags || '').split('|');
+        const show = [...sel].every((s) => t.includes(s));
+        c.hidden = !show;
+        if (show) n++;
+      });
+      tags.forEach((b) => b.setAttribute('aria-pressed', String(sel.has(b.dataset.tag || ''))));
+      if (cuenta) cuenta.textContent = String(n);
+      if (cuentaLabel) cuentaLabel.textContent = n === 1 ? 'lugar' : 'lugares';
+      if (quitar) quitar.hidden = sel.size === 0;
+      if (vacio) vacio.hidden = n > 0;
+    }
+    tags.forEach((b) => b.addEventListener('click', () => {
+      const t = b.dataset.tag || '';
+      sel.has(t) ? sel.delete(t) : sel.add(t);
+      aplicar();
+    }));
+    quitar?.addEventListener('click', () => { sel.clear(); aplicar(); });
+
+    // Abrir lugares
+    let tiktokCargado = false;
+    function abrir(id: string) {
+      const d = document.getElementById(id) as HTMLDialogElement | null;
+      if (!d) return;
+      const f = d.querySelector<HTMLIFrameElement>('iframe[data-src]');
+      if (f && !f.src) f.src = f.dataset.src || '';
+      if (d.querySelector('.tiktok-embed')) {
+        const s = document.createElement('script');
+        s.src = 'https://www.tiktok.com/embed.js';
+        s.async = true;
+        if (tiktokCargado) document.querySelectorAll('script[src*="tiktok.com/embed"]').forEach((x) => x.remove());
+        document.body.appendChild(s);
+        tiktokCargado = true;
+      }
+      d.showModal();
+      history.replaceState(null, '', `#${id}`);
+    }
+    document.querySelectorAll<HTMLElement>('[data-abrir]').forEach((b) => b.addEventListener('click', () => abrir(b.dataset.abrir || '')));
+    document.querySelectorAll<HTMLDialogElement>('dialog.lugar').forEach((d) => {
+      d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+      d.addEventListener('close', () => history.replaceState(null, '', location.pathname));
+    });
+    if (location.hash.length > 1) abrir(decodeURIComponent(location.hash.slice(1)));
+  </script>
+</Layout>
