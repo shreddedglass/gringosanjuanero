@@ -38,6 +38,8 @@ const lugares = defineCollection({
     etiquetas: z.array(z.string()).optional().nullable().transform((v) => (v ?? []).filter((x) => x && x.trim())),
     resumen: z.string(),
     foto: opcional,
+    // Fotos (.jpg/.png/.webp) o videos (.mp4/.webm) extra para el carrusel
+    galeria: z.array(z.string()).optional().nullable().transform((v) => (v ?? []).map((x) => x?.trim()).filter(Boolean) as string[]),
     ubicacion: opcional,
     mapsUrl: opcional,
     video: opcional,

@@ -102,6 +102,18 @@ const jsonld = {
     .d-map { height: 220px; border-radius: 18px; border: 3px solid var(--tinta); overflow: hidden; background: #E8E2D0; }
     .d-map iframe { width: 100%; height: 100%; border: 0; display: block; }
     @media (max-width: 600px) { .d-body { padding: 22px; } }
+    .d-carrusel { height: clamp(300px, 60vw, 460px); background: var(--tinta); }
+    .c-track { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .c-track::-webkit-scrollbar { display: none; }
+    .c-slide { flex: 0 0 100%; height: 100%; scroll-snap-align: center; display: flex; align-items: center; justify-content: center; }
+    .c-slide img, .c-slide video { width: 100%; height: 100%; object-fit: contain; }
+    .c-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: #fff; border: 3px solid var(--tinta); color: var(--tinta); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .c-prev { left: 14px; } .c-prev :global(svg) { transform: rotate(180deg); }
+    .c-next { right: 14px; }
+    .c-btn:disabled { opacity: 0.35; cursor: default; }
+    .c-dots { position: absolute; bottom: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; pointer-events: none; }
+    .c-dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); border: 2px solid var(--tinta); }
+    .c-dots span.on { background: var(--sol); }
   </style>
 
   <section class="wrap title-row">
@@ -214,7 +226,28 @@ const jsonld = {
     const link = mapsLink(l.data.ubicacion ?? `${l.data.nombre}, ${l.data.pueblo}, República Dominicana`, l.data.mapsUrl);
     return (
       <dialog class="lugar" id={l.id} aria-labelledby={`t-${l.id}`}>
-        <div class="d-media">
+        {(() => {
+          const slides = [l.data.foto, ...l.data.galeria].filter(Boolean) as string[];
+          if (slides.length < 2) return null;
+          return (
+            <div class="d-media d-carrusel" data-carrusel>
+              <div class="c-track">
+                {slides.map((src, i) => (
+                  <div class="c-slide">
+                    {/\.(mp4|webm|mov)$/i.test(src)
+                      ? <video src={src} controls playsinline preload="none" />
+                      : <img src={src} alt={`${l.data.nombre}, foto ${i + 1} de ${slides.length}`} loading="lazy" decoding="async" />}
+                  </div>
+                ))}
+              </div>
+              <button type="button" class="c-btn c-prev" aria-label="Foto anterior"><Icon name="arrow" size={20} /></button>
+              <button type="button" class="c-btn c-next" aria-label="Foto siguiente"><Icon name="arrow" size={20} /></button>
+              <div class="c-dots">{slides.map((_, i) => <span class={i === 0 ? 'on' : ''} />)}</div>
+              <form method="dialog"><button class="d-close" aria-label="Cerrar"><Icon name="close" size={20} /></button></form>
+            </div>
+          );
+        })()}
+        <div class="d-media" hidden={[l.data.foto, ...l.data.galeria].filter(Boolean).length >= 2}>
           <Photo src={l.data.foto} alt={l.data.nombre} tone={pagina} />
           <form method="dialog"><button class="d-close" aria-label="Cerrar"><Icon name="close" size={20} /></button></form>
         </div>
@@ -297,6 +330,26 @@ const jsonld = {
     document.querySelectorAll<HTMLDialogElement>('dialog.lugar').forEach((d) => {
       d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
       d.addEventListener('close', () => history.replaceState(null, '', location.pathname));
+    });
+    // Carrusel de fotos
+    document.querySelectorAll<HTMLElement>('[data-carrusel]').forEach((c) => {
+      const track = c.querySelector<HTMLElement>('.c-track')!;
+      const prev = c.querySelector<HTMLButtonElement>('.c-prev')!;
+      const next = c.querySelector<HTMLButtonElement>('.c-next')!;
+      const dots = Array.from(c.querySelectorAll<HTMLElement>('.c-dots span'));
+      const actual = () => Math.round(track.scrollLeft / (track.clientWidth || 1));
+      const ir = (i: number) => track.scrollTo({ left: i * track.clientWidth, behavior: 'smooth' });
+      const pintar = () => {
+        const i = actual();
+        dots.forEach((d, k) => d.classList.toggle('on', k === i));
+        prev.disabled = i <= 0;
+        next.disabled = i >= dots.length - 1;
+        c.querySelectorAll('video').forEach((v, k) => { if (k !== i) v.pause(); });
+      };
+      prev.addEventListener('click', () => ir(actual() - 1));
+      next.addEventListener('click', () => ir(actual() + 1));
+      track.addEventListener('scroll', () => requestAnimationFrame(pintar), { passive: true });
+      pintar();
     });
     if (location.hash.length > 1) abrir(decodeURIComponent(location.hash.slice(1)));
   </script>
