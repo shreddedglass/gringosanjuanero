@@ -1,26 +1,35 @@
 ---
 // Formulario para negocios que quieren aparecer en la página. Los mensajes llegan por correo vía Web3Forms.
-interface Props { pagina: string }
-const { pagina } = Astro.props;
+interface Props { pagina: string; eyebrow?: string; titulo?: string; texto?: string; nombreLabel?: string; placeholder?: string; boton?: string; conPadding?: boolean }
+const {
+  pagina,
+  eyebrow = 'Para negocios',
+  titulo = '¿Quieres que tu negocio salga aquí?',
+  texto = 'Invítame a conocerlo. Si me gusta, lo pongo en la página y quizás hasta en un video.',
+  nombreLabel = 'Nombre del negocio',
+  placeholder = 'Cuéntame de tu negocio: qué ofreces y dónde queda.',
+  boton = 'Enviar invitación',
+  conPadding = true,
+} = Astro.props;
 const ACCESS_KEY = 'a857c423-27f8-4f02-89d4-d07201cdeb69';
 const id = `negocio-${pagina.toLowerCase().replace(/[^a-z]+/g, '-')}`;
 ---
-<section class="wrap negocio-sec">
+<section class:list={["wrap", { "negocio-sec": conPadding }]}>
   <div class="negocio">
     <div class="n-texto">
-      <span class="eyebrow">Para negocios</span>
-      <h2>¿Quieres que tu negocio salga aquí?</h2>
-      <p>Invítame a conocerlo. Si me gusta, lo pongo en la página y quizás hasta en un video.</p>
+      <span class="eyebrow">{eyebrow}</span>
+      <h2>{titulo}</h2>
+      <p>{texto}</p>
       <img src="/images/logo.png" alt="" width="120" height="120" loading="lazy" />
     </div>
     <form class="n-form" id={id} action="https://api.web3forms.com/submit" method="POST" data-negocio>
       <input type="hidden" name="access_key" value={ACCESS_KEY} />
-      <input type="hidden" name="subject" value={`Nuevo negocio desde gringosanjuanero (${pagina})`} />
+      <input type="hidden" name="subject" value={`Nuevo mensaje desde gringosanjuanero (${pagina})`} />
       <input type="hidden" name="from_name" value="Gringo Sanjuanero" />
       <input type="hidden" name="pagina" value={pagina} />
       <input type="checkbox" name="botcheck" class="n-bot" tabindex="-1" autocomplete="off" />
 
-      <label>Nombre del negocio
+      <label>{nombreLabel}
         <input type="text" name="negocio" required autocomplete="organization" />
       </label>
       <div class="n-fila">
@@ -32,9 +41,9 @@ const id = `negocio-${pagina.toLowerCase().replace(/[^a-z]+/g, '-')}`;
         </label>
       </div>
       <label>Mensaje
-        <textarea name="mensaje" rows="4" required placeholder="Cuéntame de tu negocio: qué ofreces y dónde queda."></textarea>
+        <textarea name="mensaje" rows="4" required placeholder={placeholder}></textarea>
       </label>
-      <button type="submit" class="btn btn-primary">Enviar invitación</button>
+      <button type="submit" class="btn btn-primary">{boton}</button>
       <p class="n-estado" role="status" aria-live="polite"></p>
     </form>
   </div>

@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import NegocioForm from '../components/NegocioForm.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+
+const razones = [
+  { titulo: 'Tienes un negocio', texto: 'Si crees que tu negocio merece más apoyo, invítame. Si me gusta, lo pongo en la página y quizás en un video.', tono: 'barro' },
+  { titulo: 'Conoces un sitio', texto: '¿Un salto, un río o un comedor que tengo que visitar? Dime dónde queda y lo pongo en la lista.', tono: 'rio' },
+  { titulo: 'Quieres colaborar', texto: 'Videos, eventos o cualquier idea para apoyar a San Juan y al Sur. Escríbeme y lo hablamos.', tono: 'campo' },
+];
+---
+<Layout title="Contacto" description="Escríbele al Gringo Sanjuanero: negocios, recomendaciones y colaboraciones en San Juan de la Maguana y el sur dominicano." active="contacto">
+  <style>
+    .c-hero { display: flex; flex-wrap: wrap; align-items: center; gap: 48px; padding-top: 48px; padding-bottom: 56px; }
+    .c-hero > div { flex: 1 1 520px; display: flex; flex-direction: column; gap: 18px; }
+    .c-hero h1 { font-weight: 800; font-size: clamp(46px, 6.2vw, 84px); line-height: 0.98; letter-spacing: -0.02em; }
+    .c-hero h1 span { background: var(--barro); color: #fff; padding: 0 14px; border-radius: 18px; display: inline-block; transform: rotate(-2deg); }
+    .c-hero p { font-size: 19px; color: var(--texto-suave); max-width: 54ch; }
+    .c-hero img { width: 220px; height: 220px; padding: 20px; border: 5px solid var(--tinta); box-shadow: 12px 12px 0 0 var(--barro); flex: 0 0 auto; }
+    .razones { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; padding-bottom: 16px; }
+    .razon { background: #fff; border: 3px solid var(--tinta); border-radius: 22px; padding: 24px; display: flex; flex-direction: column; gap: 10px; box-shadow: 5px 5px 0 var(--tinta); border-top: 12px solid var(--c); }
+    .razon h2 { font-weight: 800; font-size: 24px; }
+    .razon p { font-size: 16px; color: var(--texto-suave); }
+    .redes { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-bottom: 96px; }
+    .redes strong { margin-right: 6px; }
+    @media (max-width: 600px) { .c-hero img { display: none; } .c-hero { padding-bottom: 32px; } }
+  </style>
+
+  <section class="wrap c-hero">
+    <div>
+      <span class="eyebrow">Contacto</span>
+      <h1>Hablemos <span>claro</span></h1>
+      <p>Soy Josh, un gringo que lleva más de 8 años en la República Dominicana y vive en San Juan de la Maguana. Recorro el Sur buscando los mejores saltos, ríos, playas y sitios para comer, y te cuento cuáles valen la pena.</p>
+      <p>Lo que más me gusta es destacar a los emprendedores y ayudar a los negocios buenos que tanto se merecen los sanjuaneros. Si crees que tu negocio merece más apoyo, escríbeme.</p>
+    </div>
+    <img class="logo-circle" src="/images/logo.png" alt="El Gringo Sanjuanero" width="220" height="220" />
+  </section>
+
+  <section class="wrap razones">
+    {razones.map((r) => (
+      <div class="razon" style={`--c: var(--${r.tono});`}>
+        <h2>{r.titulo}</h2>
+        <p>{r.texto}</p>
+      </div>
+    ))}
+  </section>
+
+  <NegocioForm
+    pagina="Contacto"
+    eyebrow="Escríbeme"
+    titulo="Mándame un mensaje"
+    texto="Cuéntame qué tienes en mente. Leo todos los mensajes y te respondo por correo o por WhatsApp."
+    nombreLabel="Tu nombre o el de tu negocio"
+    placeholder="¿En qué te puedo ayudar?"
+    boton="Enviar mensaje"
+  />
+
+  <section class="wrap redes">
+    <strong>También me encuentras en:</strong>
+    <a class="btn btn-dark btn-sm" href={site.tiktok} target="_blank" rel="noopener"><Icon name="music" /> TikTok</a>
+    <a class="btn btn-light btn-sm" href={site.instagram} target="_blank" rel="noopener"><Icon name="insta" /> Instagram</a>
+  </section>
+</Layout>

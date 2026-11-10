@@ -7,7 +7,7 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
-  active?: 'inicio' | 'explorar' | 'hospedarse' | 'comer' | 'blog';
+  active?: 'inicio' | 'explorar' | 'hospedarse' | 'comer' | 'blog' | 'contacto';
   type?: 'website' | 'article';
   jsonld?: object;
 }
@@ -17,12 +17,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image, Astro.site);
 
 const nav = [
-  { key: 'inicio', label: 'Inicio', href: '/' },
   { key: 'explorar', label: 'Dónde Explorar', href: '/donde-explorar/' },
   { key: 'hospedarse', label: 'Dónde Hospedarse', href: '/donde-hospedarse/' },
   { key: 'comer', label: 'Dónde Comer', href: '/donde-comer/' },
   { key: 'blog', label: 'Blog', href: '/blog/' },
 ];
+const footerNav = [{ key: 'inicio', label: 'Inicio', href: '/' }, ...nav, { key: 'contacto', label: 'Contacto', href: '/contacto/' }];
 const year = new Date().getFullYear();
 ---
 <!doctype html>
@@ -61,7 +61,7 @@ const year = new Date().getFullYear();
       {nav.map((n) => (
         <a class="nav-link" href={n.href} aria-current={active === n.key ? 'page' : undefined}>{n.label}</a>
       ))}
-      <a class="btn btn-dark btn-sm" href={site.tiktok} target="_blank" rel="noopener"><Icon name="music" /> Sígueme en TikTok</a>
+      <a class="btn btn-dark btn-sm" href="/contacto/" aria-current={active === 'contacto' ? 'page' : undefined}>Contacto</a>
     </nav>
   </header>
 
@@ -76,7 +76,7 @@ const year = new Date().getFullYear();
         <span>{site.lema}</span>
       </div>
       <nav aria-label="Pie de página">
-        {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+        {footerNav.map((n) => <a href={n.href}>{n.label}</a>)}
         <a href={site.tiktok} target="_blank" rel="noopener">TikTok</a>
         <a href={site.instagram} target="_blank" rel="noopener">Instagram</a>
       </nav>
