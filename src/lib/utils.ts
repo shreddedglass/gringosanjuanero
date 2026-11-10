@@ -25,7 +25,9 @@ export function readingTime(text = '') {
 
 export function tiktokId(url?: string) {
   if (!url) return undefined;
-  const m = url.match(/video\/(\d+)/);
+  // Acepta enlace normal (/video/123), enlace del reproductor (/player/v1/123),
+  // el código <iframe> completo pegado tal cual, o solo el número.
+  const m = url.match(/(?:video|player\/v1)\/(\d{10,})/) || url.trim().match(/^(\d{10,})$/);
   return m ? m[1] : undefined;
 }
 

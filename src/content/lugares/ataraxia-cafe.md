@@ -10,7 +10,7 @@ resumen: "El mejor café de San Juan, y no pienso discutirlo. Un ambiente fino f
 foto: "/images/lugares/ataraxia-cafe-san-juan.jpg"
 ubicacion: "Ataraxia Café, Parque Sánchez, San Juan de la Maguana, República Dominicana"
 mapsUrl: ""
-video: ""
+video: "https://www.tiktok.com/player/v1/7694690032770239758"
 consejo: "Agarra una mesa al lado del ventanal: tienes el café en la mano y el Parque Sánchez de frente."
 favorito: 1
 ---

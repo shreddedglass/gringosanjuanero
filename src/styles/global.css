@@ -155,7 +155,8 @@ a.card:hover, button.card:hover { color: var(--tinta); transform: translate(-2px
 /* TikTok */
 .tiktok-box { border: 3px dashed var(--rio); border-radius: 24px; padding: 24px; background: #EAF6F3; display: flex; flex-direction: column; gap: 12px; align-items: center; }
 .tiktok-box h2, .tiktok-box h3 { font-size: 26px; font-weight: 800; align-self: flex-start; }
-.tiktok-box blockquote.tiktok-embed { margin: 0 auto !important; }
+.tiktok-player { width: 100%; max-width: 340px; aspect-ratio: 325 / 578; border-radius: 18px; overflow: hidden; border: 3px solid var(--tinta); background: var(--tinta); }
+.tiktok-player iframe { width: 100%; height: 100%; border: 0; display: block; }
 
 /* Keep tilted bands from causing sideways scroll on phones */
 html, body { overflow-x: clip; }
