@@ -8,6 +8,12 @@ dificultad: Ir con guía
 resumen: Una ruta extremadamente difícil y peligrosa, con un salto al final que
   es inimaginablemente hermoso.
 foto: /images/lugares/salto-san-pedro-san-juan.jpg
+galeria:
+  - /images/lugares/salto-san-pedro-cascada.jpg
+  - /images/lugares/salto-san-pedro-grupo.jpg
+  - /images/lugares/salto-san-pedro-sendero.jpg
+  - /video/lugares/salto-san-pedro-video-1.mp4
+  - /video/lugares/salto-san-pedro-video-2.mp4
 ubicacion: Cascada de San Pedro, San Juan de la Maguana, República Dominicana
 consejo: "No vayas solo: esta ruta es para hacerla con un guía que conozca el camino."
 favorito: 3

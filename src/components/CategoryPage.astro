@@ -239,7 +239,7 @@ const jsonld = {
                 {slides.map((src, i) => (
                   <div class="c-slide">
                     {/\.(mp4|webm|mov)$/i.test(src)
-                      ? <video src={src} controls playsinline preload="none" />
+                      ? <video src={`${src}#t=0.1`} controls playsinline preload="metadata" />
                       : <img src={src} alt={`${l.data.nombre}, foto ${i + 1} de ${slides.length}`} loading="lazy" decoding="async" />}
                   </div>
                 ))}
