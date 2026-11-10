@@ -43,6 +43,7 @@ const lugares = defineCollection({
     ubicacion: opcional,
     mapsUrl: opcional,
     video: opcional,
+    instagram: opcional,
     consejo: opcional,
     favorito: z.coerce.number().int().min(0).max(3).optional().nullable().transform((v) => v ?? 0),
     borrador: z.boolean().optional().default(false),

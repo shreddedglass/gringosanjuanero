@@ -11,6 +11,7 @@ foto: "/images/lugares/ataraxia-cafe-san-juan.jpg"
 ubicacion: "Ataraxia Café, Parque Sánchez, San Juan de la Maguana, República Dominicana"
 mapsUrl: ""
 video: "https://www.tiktok.com/player/v1/7694690032770239758"
+instagram: "https://www.instagram.com/reel/DeVsiVCuCmK/"
 consejo: "Agarra una mesa al lado del ventanal: tienes el café en la mano y el Parque Sánchez de frente."
 favorito: 1
 ---
