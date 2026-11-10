@@ -41,7 +41,7 @@ const tagsDe = (l: (typeof lugares)[number]) => [l.data.pueblo, ...l.data.tipo, 
 const COLOR_TAG: Record<string, string> = {
   'ir con amigos': 'campo', 'ir con experiencia': 'sol', 'ir con guía': 'barro',
   'río': 'azul', 'salto': 'rio', 'playa': 'sol',
-  'barahona': 'azul', 'san juan de la maguana': 'campo',
+  'barahona': 'azul', 'san juan de la maguana': 'campo', 'azua': 'sol',
 };
 const colorDe = (t: string) => COLOR_TAG[t.trim().toLowerCase()] ?? (pagina === 'explorar' ? 'rio' : pagina === 'hospedarse' ? 'campo' : 'barro');
 const chipsDe = (l: (typeof lugares)[number]) => [...l.data.tipo, l.data.dificultad, ...l.data.etiquetas].filter(Boolean) as string[];
