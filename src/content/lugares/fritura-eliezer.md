@@ -1,7 +1,7 @@
 ---
 nombre: "Fritura Eliezer “El Goldito del Sazón”"
 pagina: comer
-pueblo: San Juan de la Maguana
+pueblo: San Juan
 tipo:
   - Fritura
 etiquetas:

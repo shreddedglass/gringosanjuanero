@@ -1,7 +1,7 @@
 ---
 nombre: "Salto de Babor Arriba"
 pagina: explorar
-pueblo: San Juan de la Maguana
+pueblo: San Juan
 tipo:
   - Salto
 dificultad: Ir con experiencia

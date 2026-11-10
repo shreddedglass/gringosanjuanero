@@ -1,7 +1,7 @@
 ---
 nombre: "Ejemplo: Nombre del camping"
 pagina: hospedarse
-pueblo: San Juan de la Maguana
+pueblo: San Juan
 tipo:
   - Camping
 etiquetas:

@@ -1,7 +1,7 @@
 ---
 nombre: "Presa de Palomino"
 pagina: explorar
-pueblo: San Juan de la Maguana
+pueblo: San Juan
 tipo:
   - Río
 dificultad: Ir con guía

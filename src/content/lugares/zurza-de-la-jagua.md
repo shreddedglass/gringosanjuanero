@@ -1,7 +1,7 @@
 ---
 nombre: "La Zurza de La Jagua"
 pagina: explorar
-pueblo: San Juan de la Maguana
+pueblo: San Juan
 tipo:
   - Río
 dificultad: Ir con amigos

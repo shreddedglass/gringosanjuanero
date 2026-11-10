@@ -1,7 +1,7 @@
 ---
 nombre: "Salto de Jinova"
 pagina: explorar
-pueblo: San Juan de la Maguana
+pueblo: San Juan
 tipo:
   - Río
   - Salto
