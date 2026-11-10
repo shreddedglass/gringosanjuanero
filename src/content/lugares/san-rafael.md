@@ -2,11 +2,11 @@
 nombre: San Rafael
 pagina: explorar
 pueblo: Barahona
-tipo: Río
-etiquetas:
+tipo:
+  - Río
   - Salto
   - Playa
-  - Ir con amigos
+dificultad: Ir con experiencia
 resumen: Un río que baja por una serie de piscinas naturales bien bonitas, con
   restaurantes alrededor y una parte gratis abajo.
 foto: /images/lugares/balneario-san-rafael-barahona.jpg

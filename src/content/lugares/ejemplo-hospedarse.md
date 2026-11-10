@@ -2,7 +2,8 @@
 nombre: "Ejemplo: Nombre del camping"
 pagina: hospedarse
 pueblo: San Juan de la Maguana
-tipo: Camping
+tipo:
+  - Camping
 etiquetas:
   - Con amigos
 resumen: "Este es un lugar para acampar de ejemplo. Edítalo o bórralo desde el panel."

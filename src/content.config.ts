@@ -32,7 +32,9 @@ const lugares = defineCollection({
     nombre: z.string(),
     pagina: z.enum(['explorar', 'hospedarse', 'comer']),
     pueblo: z.string(),
-    tipo: z.string(),
+    // Uno o varios tipos (Salto, Río, Playa...). Acepta texto suelto o lista.
+    tipo: z.union([z.string(), z.array(z.string())]).transform((v) => (Array.isArray(v) ? v : [v]).map((x) => x?.trim()).filter(Boolean) as string[]),
+    dificultad: opcional,
     etiquetas: z.array(z.string()).optional().nullable().transform((v) => (v ?? []).filter((x) => x && x.trim())),
     resumen: z.string(),
     foto: opcional,

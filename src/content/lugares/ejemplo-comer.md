@@ -2,7 +2,8 @@
 nombre: "Ejemplo: Nombre del restaurante"
 pagina: comer
 pueblo: San Juan de la Maguana
-tipo: Restaurante
+tipo:
+  - Restaurante
 etiquetas:
   - Con amigos
 resumen: "Este es un restaurante de ejemplo. Edítalo o bórralo desde el panel."

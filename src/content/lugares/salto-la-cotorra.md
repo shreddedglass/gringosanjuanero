@@ -2,9 +2,10 @@
 nombre: "Salto La Cotorra"
 pagina: explorar
 pueblo: San Juan de la Maguana
-tipo: Salto
-etiquetas:
+tipo:
   - Río
+  - Salto
+dificultad: Ir con experiencia
 resumen: "Una caminata de como una hora que termina en un cañón con una serie de cascadas pequeñas. De los mejores del Sur."
 foto: "/images/lugares/salto-la-cotorra-san-juan.jpg"
 ubicacion: "Salto La Cotorra, San Juan de la Maguana, República Dominicana"

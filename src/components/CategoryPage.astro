@@ -24,13 +24,18 @@ const favoritos = items.filter((x) => x.l.data.favorito > 0).sort((a, b) => a.l.
 const etiqueta = PAGINA_A_ETIQUETA[pagina];
 const posts = (await getPosts()).filter((p) => p.data.etiqueta === etiqueta).slice(0, 3);
 
+const DIFICULTAD = ['Ir con amigos', 'Ir con experiencia', 'Ir con guía'];
+const posDif = (t: string) => (DIFICULTAD.includes(t) ? DIFICULTAD.indexOf(t) : 99);
+const ordenarDificultad = (arr: string[]) => [...new Set(arr.filter(Boolean))].sort((a, b) => posDif(a) - posDif(b));
 const uniq = (arr: string[]) => [...new Set(arr.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
 const grupos = [
   { titulo: 'Lugar', tags: uniq(lugares.map((l) => l.data.pueblo)) },
-  { titulo: 'Tipo', tags: uniq(lugares.map((l) => l.data.tipo)) },
+  { titulo: 'Tipo', tags: uniq(lugares.flatMap((l) => l.data.tipo)) },
+  { titulo: 'Dificultad', tags: ordenarDificultad(lugares.map((l) => l.data.dificultad ?? '')) },
   { titulo: 'Ideal para', tags: uniq(lugares.flatMap((l) => l.data.etiquetas)) },
 ].filter((g) => g.tags.length > 0);
-const tagsDe = (l: (typeof lugares)[number]) => [l.data.pueblo, l.data.tipo, ...l.data.etiquetas].join('|');
+const tagsDe = (l: (typeof lugares)[number]) => [l.data.pueblo, ...l.data.tipo, l.data.dificultad, ...l.data.etiquetas].filter(Boolean).join('|');
+const chipsDe = (l: (typeof lugares)[number]) => [...l.data.tipo, l.data.dificultad, ...l.data.etiquetas].filter(Boolean) as string[];
 const rot = ['-1.5deg', '1deg', '-0.5deg'];
 
 const jsonld = {
@@ -115,7 +120,7 @@ const jsonld = {
                 <span class="fav-badge"><Icon name="star" size={16} /> Favorito #{l.data.favorito}</span>
               </span>
               <span class="card-body">
-                <span class={`chip chip-${pagina}`}>{l.data.tipo}</span>
+                <span class="chips">{l.data.tipo.map((t) => <span class={`chip chip-${pagina}`}>{t}</span>)}</span>
                 <span class="card-title" style="font-family: var(--display);">{l.data.nombre}</span>
                 <span class="town"><Icon name="pin" size={15} /> {l.data.pueblo}</span>
                 <span style="font-size: 16px;">{l.data.resumen}</span>
@@ -166,8 +171,7 @@ const jsonld = {
                 <span class="town"><Icon name="pin" size={15} /> {l.data.pueblo}</span>
                 <span style="color: var(--gris); font-size: 15px;">{l.data.resumen}</span>
                 <span class="chips">
-                  <span class={`chip chip-${pagina}`}>{l.data.tipo}</span>
-                  {l.data.etiquetas.map((t) => <span class={`chip chip-${pagina}`}>{t}</span>)}
+                  {chipsDe(l).map((t) => <span class={`chip chip-${pagina}`}>{t}</span>)}
                 </span>
               </span>
             </button>
@@ -212,8 +216,7 @@ const jsonld = {
             <h2 id={`t-${l.id}`}>{l.data.nombre}</h2>
             <span class="town"><Icon name="pin" size={16} /> {l.data.pueblo}</span>
             <span class="chips">
-              <span class={`chip chip-${pagina}`}>{l.data.tipo}</span>
-              {l.data.etiquetas.map((t) => <span class={`chip chip-${pagina}`}>{t}</span>)}
+              {chipsDe(l).map((t) => <span class={`chip chip-${pagina}`}>{t}</span>)}
             </span>
           </div>
           <div class="d-cols">

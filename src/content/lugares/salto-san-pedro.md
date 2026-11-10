@@ -2,9 +2,9 @@
 nombre: Salto San Pedro
 pagina: explorar
 pueblo: San Juan de la Maguana
-tipo: Salto
-etiquetas:
-  - Ir con guía
+tipo:
+  - Salto
+dificultad: Ir con guía
 resumen: Una ruta extremadamente difícil y peligrosa, con un salto al final que
   es inimaginablemente hermoso.
 foto: /images/lugares/salto-san-pedro-san-juan.jpg

@@ -2,9 +2,9 @@
 nombre: "Salto de Sosa"
 pagina: explorar
 pueblo: San Juan de la Maguana
-tipo: Salto
-etiquetas:
-  - Ir con amigos
+tipo:
+  - Salto
+dificultad: Ir con amigos
 resumen: "Cerca del centro de San Juan, fácil de llegar en cualquier vehículo y con un sendero de menos de 15 minutos."
 foto: "/images/lugares/salto-de-sosa-san-juan.jpg"
 ubicacion: "Salto de Sosa, San Juan de la Maguana, República Dominicana"
