@@ -7,7 +7,7 @@ etiquetas:
   - Con amigos
   - Gratis
 resumen: "Este es un lugar de ejemplo. Edítalo o bórralo desde el panel."
-foto: ""
+foto: "/images/fotos/charco-con-amigos.jpg"
 ubicacion: "San Juan de la Maguana, República Dominicana"
 mapsUrl: ""
 video: ""

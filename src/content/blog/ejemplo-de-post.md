@@ -3,7 +3,7 @@ title: "Ejemplo: El título de tu primer post"
 date: 2026-11-09
 etiqueta: explorar
 resumen: "Este es un post de ejemplo para que veas cómo queda. Edítalo o bórralo desde el panel."
-portada: ""
+portada: "/images/fotos/vista-playa-costa-sur.jpg"
 video: ""
 lugar: "San Juan de la Maguana"
 comoLlegar: "Carro o motor"

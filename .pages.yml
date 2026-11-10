@@ -145,7 +145,13 @@ content:
         label: Texto debajo del título principal
         type: text
       - name: heroFoto
-        label: Foto principal de la portada
+        label: Foto principal de la portada (se usa si no hay video)
+        type: image
+      - name: heroVideo
+        label: Video de la portada (ruta del archivo .mp4; déjalo vacío para usar la foto)
+        type: string
+      - name: heroPoster
+        label: Imagen mientras carga el video
         type: image
       - name: sobreMiTitulo
         label: "¿Quién soy? – Título"

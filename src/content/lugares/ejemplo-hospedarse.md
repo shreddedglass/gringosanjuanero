@@ -1,16 +1,16 @@
 ---
-nombre: "Ejemplo: Nombre de la casa de campo"
+nombre: "Ejemplo: Nombre del camping"
 pagina: hospedarse
 pueblo: San Juan de la Maguana
-tipo: Casa de campo
+tipo: Camping
 etiquetas:
-  - En familia
-resumen: "Este es un alojamiento de ejemplo. Edítalo o bórralo desde el panel."
-foto: ""
+  - Con amigos
+resumen: "Este es un lugar para acampar de ejemplo. Edítalo o bórralo desde el panel."
+foto: "/images/fotos/campamento-en-el-rio.jpg"
 ubicacion: "San Juan de la Maguana, República Dominicana"
 mapsUrl: ""
 video: ""
 consejo: ""
 favorito: 1
 ---
-Aquí va tu reseña completa: las habitaciones, la comida, el ambiente y para quién es ideal.
+Aquí va tu reseña completa: dónde montar la casa de campaña, qué llevar, el ambiente y para quién es ideal.

@@ -61,9 +61,11 @@ const jsonld = {
     <div class="hero-art">
       <div class="hero-sun"></div>
       <div class="hero-photo">
-        {site.heroFoto
-          ? <img class="cover" src={site.heroFoto} alt="El Gringo Sanjuanero explorando el sur" loading="eager" />
-          : <div class="ph ph-explorar cover"><Icon name="photo" size={40} /><span>Tu foto aquí</span></div>}
+        {site.heroVideo
+          ? <video class="cover" src={site.heroVideo} poster={site.heroPoster || undefined} autoplay muted loop playsinline preload="metadata" aria-label="El Gringo Sanjuanero de excursión con amigos"></video>
+          : site.heroFoto
+            ? <img class="cover" src={site.heroFoto} alt="El Gringo Sanjuanero explorando el sur" loading="eager" />
+            : <div class="ph ph-explorar cover"><Icon name="photo" size={40} /><span>Tu foto aquí</span></div>}
       </div>
       <img class="hero-face" src="/images/logo.png" alt="" width="200" />
     </div>
