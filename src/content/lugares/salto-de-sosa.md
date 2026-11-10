@@ -11,7 +11,7 @@ ubicacion: "Salto de Sosa, San Juan de la Maguana, República Dominicana"
 mapsUrl: ""
 video: ""
 consejo: "Como el sendero no dura más de 15 minutos, puedes ir a cualquier hora del día."
-favorito: 3
+favorito: 0
 ---
 El Salto de Sosa está cerca del centro de San Juan y es fácil de llegar en cualquier vehículo. La ruta es de las más fáciles: el sendero no dura más de 15 minutos.
 
