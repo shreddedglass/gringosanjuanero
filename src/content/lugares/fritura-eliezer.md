@@ -17,7 +17,7 @@ ubicacion: "Fritura Eliezer, San Juan de la Maguana, República Dominicana"
 mapsUrl: ""
 video: ""
 consejo: "Es mi fritura favorita y no hay otra igual cerca, así que llega con hambre."
-favorito: 1
+favorito: 2
 ---
 Para mí, esta es la mejor fritura de San Juan de la Maguana. Al dueño le dicen "El Goldito", y es muy amable, pero lo más importante es que sabe cocinar.
 
