@@ -1,5 +1,5 @@
 ---
-nombre: "San Rafael"
+nombre: San Rafael
 pagina: explorar
 pueblo: Barahona
 tipo: Río
@@ -7,13 +7,14 @@ etiquetas:
   - Salto
   - Playa
   - Ir con amigos
-resumen: "Un río que baja por una serie de piscinas naturales bien bonitas, con restaurantes alrededor y una parte gratis abajo."
-foto: "/images/lugares/balneario-san-rafael-barahona.jpg"
-ubicacion: "Balneario San Rafael, Barahona, República Dominicana"
-mapsUrl: ""
-video: ""
-consejo: "Abajo la entrada y el parqueo son gratis. La playa es linda, pero tiene mucha corriente, así que ten cuidado."
+resumen: Un río que baja por una serie de piscinas naturales bien bonitas, con
+  restaurantes alrededor y una parte gratis abajo.
+foto: /images/lugares/balneario-san-rafael-barahona.jpg
+ubicacion: Balneario San Rafael, Barahona, República Dominicana
+consejo: Abajo la entrada es gratis pero paga el parqueo. La playa es linda,
+  pero tiene mucha corriente, así que ten cuidado porque es bastante peligroso.
 favorito: 0
+borrador: false
 ---
 San Rafael es un río que baja por una serie de piscinas naturales bastante hermosas. El agua es bien fría, pero vale la pena meterse.
 
