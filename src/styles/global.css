@@ -46,14 +46,24 @@ p { margin: 0; }
 .brand span { font-family: var(--display); font-weight: 800; font-size: 22px; line-height: 1.1; }
 .logo-circle { border-radius: 50%; object-fit: contain; background: var(--sol); }
 .brand .logo-circle { width: 58px; height: 58px; padding: 5px; border: 3px solid var(--tinta); }
-.main-nav { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.main-nav a.nav-link { padding: 10px 16px; border-radius: 999px; text-decoration: none; color: var(--tinta); font-weight: 500; }
+.main-nav { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.main-nav a.nav-link { padding: 10px 14px; border-radius: 999px; text-decoration: none; color: var(--tinta); font-weight: 500; white-space: nowrap; }
 .main-nav a.nav-link:hover { background: #FFF0C9; }
 .main-nav a.nav-link[aria-current="page"] { background: var(--sol-claro); font-weight: 700; }
+.main-nav .btn { margin-left: 8px; white-space: nowrap; }
+/* Too narrow for one line: the menu moves to its own row under the logo */
+@media (max-width: 1140px) {
+  .site-header { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .main-nav { width: 100%; margin-left: -14px; }
+}
+/* Phones: pills wrap onto rows so every page stays visible */
 @media (max-width: 760px) {
-  .site-header { flex-direction: column; align-items: flex-start; }
-  .main-nav { flex-wrap: nowrap; overflow-x: auto; width: calc(100% + 24px); padding-bottom: 6px; margin-right: -24px; }
-  .main-nav a { white-space: nowrap; }
+  .site-header { padding-top: 16px; padding-bottom: 16px; }
+  .main-nav { gap: 8px; margin-left: 0; }
+  .main-nav a.nav-link { padding: 8px 14px; font-size: 15px; background: #fff; border: 2px solid var(--tinta); }
+  .main-nav a.nav-link[aria-current="page"] { background: var(--sol-claro); }
+  .main-nav .btn { margin-left: 0; }
+  .main-nav .btn-sm { padding: 8px 16px; min-height: 40px; font-size: 15px; }
 }
 
 /* Buttons */
@@ -136,3 +146,10 @@ a.card:hover, button.card:hover { color: var(--tinta); transform: translate(-2px
 .tiktok-box { border: 3px dashed var(--rio); border-radius: 24px; padding: 24px; background: #EAF6F3; display: flex; flex-direction: column; gap: 12px; align-items: center; }
 .tiktok-box h2, .tiktok-box h3 { font-size: 26px; font-weight: 800; align-self: flex-start; }
 .tiktok-box blockquote.tiktok-embed { margin: 0 auto !important; }
+
+/* Keep tilted bands from causing sideways scroll on phones */
+html, body { overflow-x: clip; }
+@media (max-width: 760px) {
+  .cta-actions { flex: 1 1 100% !important; }
+  .cta-actions .btn { max-width: 100%; }
+}

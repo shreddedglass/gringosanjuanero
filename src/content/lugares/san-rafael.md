@@ -13,7 +13,7 @@ foto: /images/lugares/balneario-san-rafael-barahona.jpg
 ubicacion: Balneario San Rafael, Barahona, República Dominicana
 consejo: Abajo la entrada es gratis pero paga el parqueo. La playa es linda,
   pero tiene mucha corriente, así que ten cuidado porque es bastante peligroso.
-favorito: 0
+favorito: 1
 borrador: false
 ---
 San Rafael es un río que baja por una serie de piscinas naturales bastante hermosas. El agua es bien fría, pero vale la pena meterse.
