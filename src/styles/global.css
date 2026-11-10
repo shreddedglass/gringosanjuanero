@@ -14,6 +14,9 @@
   --campo: #4E6B2C;
   --campo-claro: #E3EBD3;
   --campo-tinta: #3D5222;
+  --azul: #2563A8;
+  --azul-claro: #DCE9F7;
+  --azul-tinta: #1B4A80;
   --display: 'Bricolage Grotesque', system-ui, sans-serif;
   --body: 'DM Sans', system-ui, sans-serif;
 }
@@ -82,6 +85,13 @@ p { margin: 0; }
 .chip-alojamiento, .chip-hospedarse, .chip-campo { background: var(--campo-claro); color: var(--campo-tinta); }
 .chip-comida, .chip-comer, .chip-barro { background: var(--barro-claro); color: var(--barro-tinta); }
 .chip-sol { background: var(--sol-claro); color: #6B4A00; }
+/* Colores de etiquetas de filtro */
+.t-azul { --t-claro: var(--azul-claro); --t-tinta: var(--azul-tinta); --t-solido: var(--azul); --t-sobre: #fff; }
+.t-rio { --t-claro: var(--rio-claro); --t-tinta: var(--rio-tinta); --t-solido: var(--rio); --t-sobre: #fff; }
+.t-campo { --t-claro: var(--campo-claro); --t-tinta: var(--campo-tinta); --t-solido: var(--campo); --t-sobre: #fff; }
+.t-barro { --t-claro: var(--barro-claro); --t-tinta: var(--barro-tinta); --t-solido: var(--barro); --t-sobre: #fff; }
+.t-sol { --t-claro: var(--sol-claro); --t-tinta: #6B4A00; --t-solido: var(--sol); --t-sobre: var(--tinta); }
+.chip[class*="t-"] { background: var(--t-claro); color: var(--t-tinta); }
 
 /* Type helpers */
 .eyebrow { font-weight: 700; color: var(--barro); text-transform: uppercase; letter-spacing: 0.08em; font-size: 14px; }

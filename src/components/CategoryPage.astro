@@ -35,6 +35,13 @@ const grupos = [
   { titulo: 'Ideal para', tags: uniq(lugares.flatMap((l) => l.data.etiquetas)) },
 ].filter((g) => g.tags.length > 0);
 const tagsDe = (l: (typeof lugares)[number]) => [l.data.pueblo, ...l.data.tipo, l.data.dificultad, ...l.data.etiquetas].filter(Boolean).join('|');
+// Colores por etiqueta (los que no están aquí usan el color de la página)
+const COLOR_TAG: Record<string, string> = {
+  'ir con amigos': 'campo', 'ir con experiencia': 'sol', 'ir con guía': 'barro',
+  'río': 'azul', 'salto': 'rio', 'playa': 'sol',
+  'barahona': 'azul', 'san juan de la maguana': 'campo',
+};
+const colorDe = (t: string) => COLOR_TAG[t.trim().toLowerCase()] ?? (pagina === 'explorar' ? 'rio' : pagina === 'hospedarse' ? 'campo' : 'barro');
 const chipsDe = (l: (typeof lugares)[number]) => [...l.data.tipo, l.data.dificultad, ...l.data.etiquetas].filter(Boolean) as string[];
 const rot = ['-1.5deg', '1deg', '-0.5deg'];
 
@@ -63,8 +70,8 @@ const jsonld = {
     .filters { background: #fff; border: 3px solid var(--tinta); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
     .fgroup { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
     .fgroup strong { width: 110px; font-size: 15px; color: var(--gris); }
-    .ftag { padding: 8px 16px; min-height: 44px; border-radius: 999px; background: #fff; color: var(--tinta); font-family: var(--body); font-weight: 700; font-size: 15px; border: 2px solid var(--tinta); cursor: pointer; }
-    .ftag[aria-pressed="true"] { background: var(--acc); color: #fff; box-shadow: 3px 3px 0 var(--tinta); }
+    .ftag { padding: 8px 16px; min-height: 44px; border-radius: 999px; background: var(--t-claro, #fff); color: var(--t-tinta, var(--tinta)); font-family: var(--body); font-weight: 700; font-size: 15px; border: 2px solid var(--tinta); cursor: pointer; }
+    .ftag[aria-pressed="true"] { background: var(--t-solido, var(--acc)); color: var(--t-sobre, #fff); box-shadow: 3px 3px 0 var(--tinta); }
     .ftag[aria-pressed="true"]::after { content: ' ✕'; }
     .fbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; border-top: 2px solid #EFE6D2; padding-top: 16px; }
     .clear { background: none; border: 0; color: var(--acc); font: 700 15px var(--body); text-decoration: underline; cursor: pointer; min-height: 44px; padding: 0 8px; }
@@ -120,7 +127,7 @@ const jsonld = {
                 <span class="fav-badge"><Icon name="star" size={16} /> Favorito #{l.data.favorito}</span>
               </span>
               <span class="card-body">
-                <span class="chips">{l.data.tipo.map((t) => <span class={`chip chip-${pagina}`}>{t}</span>)}</span>
+                <span class="chips">{l.data.tipo.map((t) => <span class={`chip t-${colorDe(t)}`}>{t}</span>)}</span>
                 <span class="card-title" style="font-family: var(--display);">{l.data.nombre}</span>
                 <span class="town"><Icon name="pin" size={15} /> {l.data.pueblo}</span>
                 <span style="font-size: 16px;">{l.data.resumen}</span>
@@ -150,7 +157,7 @@ const jsonld = {
           {grupos.map((g) => (
             <div class="fgroup">
               <strong>{g.titulo}</strong>
-              {g.tags.map((t) => <button type="button" class="ftag" data-tag={t} aria-pressed="false">{t}</button>)}
+              {g.tags.map((t) => <button type="button" class={`ftag t-${colorDe(t)}`} data-tag={t} aria-pressed="false">{t}</button>)}
             </div>
           ))}
           <div class="fbar">
@@ -171,7 +178,7 @@ const jsonld = {
                 <span class="town"><Icon name="pin" size={15} /> {l.data.pueblo}</span>
                 <span style="color: var(--gris); font-size: 15px;">{l.data.resumen}</span>
                 <span class="chips">
-                  {chipsDe(l).map((t) => <span class={`chip chip-${pagina}`}>{t}</span>)}
+                  {chipsDe(l).map((t) => <span class={`chip t-${colorDe(t)}`}>{t}</span>)}
                 </span>
               </span>
             </button>
@@ -216,7 +223,7 @@ const jsonld = {
             <h2 id={`t-${l.id}`}>{l.data.nombre}</h2>
             <span class="town"><Icon name="pin" size={16} /> {l.data.pueblo}</span>
             <span class="chips">
-              {chipsDe(l).map((t) => <span class={`chip chip-${pagina}`}>{t}</span>)}
+              {chipsDe(l).map((t) => <span class={`chip t-${colorDe(t)}`}>{t}</span>)}
             </span>
           </div>
           <div class="d-cols">
