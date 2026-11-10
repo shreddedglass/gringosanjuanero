@@ -2,9 +2,9 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Cuando conectes gringosanjuanero.com, cambia la línea "site" a 'https://gringosanjuanero.com'
+// Dirección oficial del sitio (canonical, sitemap y vistas previas al compartir)
 export default defineConfig({
-  site: 'https://gringosanjuanero.jchaffee-enso.workers.dev',
+  site: 'https://gringosanjuanero.com',
   integrations: [sitemap()],
 
   // Publicar el HTML tal como está escrito (con saltos de línea y sangría),

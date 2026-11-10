@@ -1,7 +1,17 @@
 ---
 import CategoryPage from '../components/CategoryPage.astro';
+const seoArriba = "¿Vas para el Sur y no sabes dónde dormir? Tranquilo, que aquí te ayudo. Desde hoteles en San Juan de la Maguana hasta cabañas en la montaña y casas de campo con piscina, aquí pongo solo los sitios donde me he quedado de verdad. Y si eres de los que prefieren dormir bajo las estrellas, también hay rincones para acampar al lado del río.";
+const seoAbajo = {
+  "titulo": "Hoteles, cabañas y casas de campo en el sur de República Dominicana",
+  "parrafos": [
+    "Encontrar dónde dormir en San Juan de la Maguana o en el resto de la región Sur no siempre es fácil, porque muchos de los mejores sitios no salen en las grandes páginas de reservas. Por eso armé esta guía de alojamiento en el sur dominicano, con opciones para cada tipo de viaje: hoteles céntricos para quien llega por trabajo o de paso, casas de campo y villas con piscina para ir en familia o con amigos, cabañas en la montaña para una escapada en pareja y lugares para acampar cerca de ríos y saltos.",
+    "Usa los filtros para buscar por pueblo, como San Juan de la Maguana, Barahona, Azua o Pedernales, o por tipo de alojamiento. Hay opciones económicas y otras para darte un gustito. Un consejo: en fines de semana largos y fiestas patronales los sitios se llenan rápido, así que reserva con tiempo y confirma por WhatsApp antes de salir."
+  ]
+};
 ---
 <CategoryPage
+  seoArriba={seoArriba}
+  seoAbajo={seoAbajo}
   formulario
   pagina="hospedarse"
   titulo="Dónde Hospedarse"

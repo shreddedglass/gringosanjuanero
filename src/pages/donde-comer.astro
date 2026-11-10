@@ -1,7 +1,17 @@
 ---
 import CategoryPage from '../components/CategoryPage.astro';
+const seoArriba = "Si hay algo que el Sur hace mejor que nadie, es comer. Aquí te dejo dónde comer en San Juan de la Maguana y en toda la región: desde el comedor de la esquina con el mejor locrio del pueblo hasta restaurantes para una cena especial. Chivo guisado, chenchén, mariscos frescos en la costa… Ven con hambre, que aquí nadie se queda con ganas.";
+const seoAbajo = {
+  "titulo": "Los mejores restaurantes y comida típica del sur dominicano",
+  "parrafos": [
+    "La comida del sur de República Dominicana tiene sabor propio. En San Juan de la Maguana y Azua, el chivo guisado con chenchén es casi obligatorio, y bajando hacia Barahona y Pedernales los mariscos frescos mandan. Esta guía de restaurantes en San Juan de la Maguana y la región Sur reúne los sitios que he probado en persona, desde comedores económicos con el plato del día y friquitines para picar algo hasta restaurantes para ir en pareja o celebrar con amigos.",
+    "Filtra por pueblo, por tipo de comida o por plan, y busca el “Consejo del gringo” en cada lugar para saber qué pedir. Un consejo general: en los comedores, el almuerzo se acaba temprano, así que llega antes de las dos si quieres agarrar lo mejor."
+  ]
+};
 ---
 <CategoryPage
+  seoArriba={seoArriba}
+  seoAbajo={seoAbajo}
   formulario
   pagina="comer"
   titulo="Dónde Comer"

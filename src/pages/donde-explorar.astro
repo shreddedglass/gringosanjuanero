@@ -1,7 +1,18 @@
 ---
 import CategoryPage from '../components/CategoryPage.astro';
+const seoArriba = "¿Andas buscando el mejor río en San Juan de la Maguana o los saltos más lindos del Sur? Llegaste al lugar correcto. Estos son los sitios que yo mismo he caminado, nadado y sudado: charcos escondidos en el campo, saltos que te dejan con la boca abierta y playas de Barahona que hay que ver para creer. Sin filtro y sin cuento: si está en esta lista, es porque vale el viaje.";
+const seoAbajo = {
+  "titulo": "Los mejores saltos, ríos y playas de la región Sur de RD",
+  "parrafos": [
+    "La región Sur de República Dominicana tiene algunos de los rincones naturales más bonitos y menos conocidos del país. Si te preguntas qué hacer en San Juan de la Maguana, empieza por sus saltos y balnearios: el Salto de Sosa queda cerca del centro y se llega con un sendero de menos de 15 minutos, perfecto para ir con amigos a cualquier hora. Para los más aventureros, el Salto San Pedro es una de las rutas más difíciles de la zona, y por eso hay que ir con guía, pero la recompensa al final es de los saltos más impresionantes del Sur.",
+    "Bajando hacia la costa, los ríos de Barahona son otro nivel. En San Rafael, el río baja por una serie de piscinas naturales con restaurantes alrededor, y la parte de abajo es gratis.",
+    "Cada lugar de esta guía de turismo en el sur dominicano lo he visitado en persona. Usa los filtros para encontrar el mejor río, salto o playa según dónde estés y con quién vayas, y mira los videos en TikTok antes de salir. Un consejo general: el agua de los ríos del Sur es fría, así que ve temprano, lleva zapatos que agarren y respeta siempre la corriente."
+  ]
+};
 ---
 <CategoryPage
+  seoArriba={seoArriba}
+  seoAbajo={seoAbajo}
   pagina="explorar"
   titulo="Dónde Explorar"
   palabra="Explorar"

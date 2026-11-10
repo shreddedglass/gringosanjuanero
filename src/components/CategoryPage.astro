@@ -17,8 +17,10 @@ interface Props {
   descripcion: string;
   color: string;
   formulario?: boolean;
+  seoArriba?: string;
+  seoAbajo?: { titulo: string; parrafos: string[] };
 }
-const { pagina, titulo, palabra, intro, descripcion, color, formulario = false } = Astro.props;
+const { pagina, titulo, palabra, intro, descripcion, color, formulario = false, seoArriba, seoAbajo } = Astro.props;
 
 const lugares = await getLugares(pagina);
 const items = await Promise.all(lugares.map(async (l) => ({ l, Content: (await render(l)).Content })));
@@ -69,6 +71,12 @@ const jsonld = {
     .fav-badge { position: absolute; top: 16px; left: 16px; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--sol); color: var(--tinta); font-weight: 800; font-size: 14px; border: 2px solid var(--tinta); }
     .fav .card-title { font-size: 26px; font-weight: 800; }
 
+    .seo-arriba { padding-bottom: 40px; }
+    .seo-arriba p { background: #fff; border: 3px solid var(--tinta); border-left: 12px solid var(--acc); border-radius: 20px; padding: 22px 26px; font-size: 18px; line-height: 1.65; max-width: 860px; box-shadow: 5px 5px 0 var(--tinta); }
+    .seo-abajo { padding-top: 72px; padding-bottom: 88px; display: flex; flex-direction: column; gap: 18px; max-width: 860px; }
+    .seo-abajo h2 { font-weight: 800; font-size: clamp(28px, 3.4vw, 40px); margin-bottom: 4px; }
+    .seo-abajo p { font-size: 17px; line-height: 1.75; color: var(--texto-suave); }
+    @media (max-width: 600px) { .seo-arriba p { padding: 18px 18px; font-size: 17px; } .seo-abajo { padding-top: 48px; padding-bottom: 56px; } }
     .filters { background: #fff; border: 3px solid var(--tinta); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
     .fgroup { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
     .fgroup strong { width: 110px; font-size: 15px; color: var(--gris); }
@@ -125,6 +133,12 @@ const jsonld = {
     </div>
     <img class="face" src="/images/logo.png" alt="" width="150" />
   </section>
+
+  {seoArriba && (
+    <section class="wrap seo-arriba">
+      <p>{seoArriba}</p>
+    </section>
+  )}
 
   {favoritos.length > 0 && (
     <section class="band-sol favs">
@@ -222,6 +236,13 @@ const jsonld = {
         </div>
         <div class="grid">{posts.map((p) => <PostCard post={p} />)}</div>
       </div>
+    </section>
+  )}
+
+  {seoAbajo && (
+    <section class="wrap seo-abajo">
+      <h2>{seoAbajo.titulo}</h2>
+      {seoAbajo.parrafos.map((p) => <p>{p}</p>)}
     </section>
   )}
 
