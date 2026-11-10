@@ -8,6 +8,10 @@ tipo:
 dificultad: Ir con experiencia
 resumen: "Una caminata de como una hora que termina en un cañón con una serie de cascadas pequeñas. De los mejores del Sur."
 foto: "/images/lugares/salto-la-cotorra-san-juan.jpg"
+galeria:
+  - /images/lugares/salto-la-cotorra-letrero-sendero.jpg
+  - /images/lugares/salto-la-cotorra-canon-grupo.jpg
+  - /video/lugares/salto-la-cotorra-video-1.mp4
 ubicacion: "Salto La Cotorra, San Juan de la Maguana, República Dominicana"
 mapsUrl: ""
 video: ""
