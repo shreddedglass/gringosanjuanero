@@ -5,6 +5,7 @@ import Photo from './Photo.astro';
 import PostCard from './PostCard.astro';
 import TikTok from './TikTok.astro';
 import Icon from './Icon.astro';
+import NegocioForm from './NegocioForm.astro';
 import site from '../data/site.json';
 import { getLugares, getPosts, mapsLink, mapsEmbed, PAGINA_A_ETIQUETA, NOMBRE_ETIQUETA } from '../lib/utils';
 
@@ -15,8 +16,9 @@ interface Props {
   intro: string;
   descripcion: string;
   color: string;
+  formulario?: boolean;
 }
-const { pagina, titulo, palabra, intro, descripcion, color } = Astro.props;
+const { pagina, titulo, palabra, intro, descripcion, color, formulario = false } = Astro.props;
 
 const lugares = await getLugares(pagina);
 const items = await Promise.all(lugares.map(async (l) => ({ l, Content: (await render(l)).Content })));
@@ -205,6 +207,8 @@ const jsonld = {
       </>
     )}
   </section>
+
+  {formulario && <NegocioForm pagina={titulo} />}
 
   {posts.length > 0 && (
     <section class="band-accent" style={`background: ${color}; padding: 80px 0;`}>

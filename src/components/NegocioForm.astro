@@ -1,0 +1,98 @@
+---
+// Formulario para negocios que quieren aparecer en la página. Los mensajes llegan por correo vía Web3Forms.
+interface Props { pagina: string }
+const { pagina } = Astro.props;
+const ACCESS_KEY = 'a857c423-27f8-4f02-89d4-d07201cdeb69';
+const id = `negocio-${pagina.toLowerCase().replace(/[^a-z]+/g, '-')}`;
+---
+<section class="wrap negocio-sec">
+  <div class="negocio">
+    <div class="n-texto">
+      <span class="eyebrow">Para negocios</span>
+      <h2>¿Quieres que tu negocio salga aquí?</h2>
+      <p>Invítame a conocerlo. Si me gusta, lo pongo en la página y quizás hasta en un video.</p>
+      <img src="/images/logo.png" alt="" width="120" height="120" loading="lazy" />
+    </div>
+    <form class="n-form" id={id} action="https://api.web3forms.com/submit" method="POST" data-negocio>
+      <input type="hidden" name="access_key" value={ACCESS_KEY} />
+      <input type="hidden" name="subject" value={`Nuevo negocio desde gringosanjuanero (${pagina})`} />
+      <input type="hidden" name="from_name" value="Gringo Sanjuanero" />
+      <input type="hidden" name="pagina" value={pagina} />
+      <input type="checkbox" name="botcheck" class="n-bot" tabindex="-1" autocomplete="off" />
+
+      <label>Nombre del negocio
+        <input type="text" name="negocio" required autocomplete="organization" />
+      </label>
+      <div class="n-fila">
+        <label>Correo
+          <input type="email" name="email" required autocomplete="email" />
+        </label>
+        <label><span class="n-lbl">WhatsApp <em>(opcional)</em></span>
+          <input type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" />
+        </label>
+      </div>
+      <label>Mensaje
+        <textarea name="mensaje" rows="4" required placeholder="Cuéntame de tu negocio: qué ofreces y dónde queda."></textarea>
+      </label>
+      <button type="submit" class="btn btn-primary">Enviar invitación</button>
+      <p class="n-estado" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .negocio-sec { padding-top: 72px; padding-bottom: 72px; }
+  .negocio { display: flex; flex-wrap: wrap; gap: 40px; background: #fff; border: 4px solid var(--tinta); border-radius: 28px; box-shadow: 8px 8px 0 var(--tinta); padding: 40px; }
+  .n-texto { flex: 1 1 300px; display: flex; flex-direction: column; gap: 14px; }
+  .n-texto h2 { font-weight: 800; font-size: clamp(30px, 3.6vw, 44px); }
+  .n-texto img { width: 120px; margin-top: 8px; transform: rotate(-6deg); filter: drop-shadow(4px 5px 0 var(--tinta)); }
+  .n-form { flex: 1 1 420px; display: flex; flex-direction: column; gap: 16px; }
+  .n-fila { display: flex; flex-wrap: wrap; gap: 16px; }
+  .n-fila label { flex: 1 1 180px; }
+  label { display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: 15px; }
+  label em { font-style: normal; font-weight: 500; color: var(--gris); }
+  input, textarea { font: 500 16px var(--body); color: var(--tinta); background: var(--crema); border: 2px solid var(--tinta); border-radius: 14px; padding: 12px 14px; min-height: 48px; width: 100%; }
+  textarea { resize: vertical; }
+  input:focus, textarea:focus { outline: 3px solid var(--sol); outline-offset: 1px; }
+  .n-form .btn { align-self: flex-start; }
+  .n-form .btn:disabled { opacity: 0.6; cursor: wait; }
+  .n-bot { display: none; }
+  .n-estado { font-weight: 700; min-height: 1.6em; }
+  .n-estado.ok { color: var(--campo-tinta); }
+  .n-estado.error { color: var(--barro-tinta); }
+  @media (max-width: 600px) {
+    .negocio { padding: 24px; gap: 24px; box-shadow: 5px 5px 0 var(--tinta); }
+    .n-texto img { width: 84px; }
+    .n-form .btn { align-self: stretch; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[data-negocio]').forEach((form) => {
+    const estado = form.querySelector<HTMLElement>('.n-estado')!;
+    const boton = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      boton.disabled = true;
+      estado.className = 'n-estado';
+      estado.textContent = 'Enviando…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Error');
+        form.reset();
+        estado.classList.add('ok');
+        estado.textContent = '¡Gracias! Me llegó tu mensaje y te escribo pronto.';
+      } catch {
+        estado.classList.add('error');
+        estado.textContent = 'No se pudo enviar. Inténtalo otra vez o escríbeme por TikTok.';
+      } finally {
+        boton.disabled = false;
+      }
+    });
+  });
+</script>
