@@ -109,7 +109,6 @@ const jsonld = {
     .d-cols > div { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
     .d-tip { background: #fff; border: 3px solid var(--tinta); border-radius: 18px; padding: 16px 18px; display: flex; gap: 14px; align-items: center; font-size: 16px; }
     .d-tip img { width: 54px; flex-shrink: 0; }
-    .ig-btn { align-self: center; }
     .d-map { height: 220px; border-radius: 18px; border: 3px solid var(--tinta); overflow: hidden; background: #E8E2D0; }
     .d-map iframe { width: 100%; height: 100%; border: 0; display: block; }
     @media (max-width: 600px) { .d-body { padding: 22px; } }
@@ -295,12 +294,12 @@ const jsonld = {
             <div style="flex: 1 1 300px;">
               <div class="d-map"><iframe data-src={embed} title={`Mapa de ${l.data.nombre}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
               <a class="btn btn-dark btn-sm" href={link} target="_blank" rel="noopener"><Icon name="pin" size={16} /> Abrir en Google Maps</a>
+              {l.data.instagram && (
+                <a class="btn btn-light btn-sm" href={l.data.instagram} target="_blank" rel="noopener"><Icon name="insta" size={18} /> Verlo en Instagram</a>
+              )}
             </div>
           </div>
           <TikTok url={l.data.video} lazy />
-          {l.data.instagram && (
-            <a class="btn btn-light btn-sm ig-btn" href={l.data.instagram} target="_blank" rel="noopener"><Icon name="insta" size={18} /> Verlo en Instagram</a>
-          )}
         </div>
       </dialog>
     );
