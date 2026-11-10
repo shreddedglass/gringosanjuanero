@@ -16,7 +16,7 @@ ubicacion: "Salto La Cotorra, San Juan de la Maguana, República Dominicana"
 mapsUrl: ""
 video: ""
 consejo: "Dentro del cañón el agua es honda, así que hay que saber nadar."
-favorito: 1
+favorito: 2
 ---
 Este salto es uno de mis favoritos en todo el Sur. El recorrido dura alrededor de una hora, pero el camino vale la pena: cruzas un puente, pasas por una presa abandonada y vas viendo un paisaje bien lindo.
 
