@@ -299,7 +299,10 @@ const jsonld = {
               <div class="d-map"><iframe data-src={embed} title={`Mapa de ${l.data.nombre}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
               <a class="btn btn-dark btn-sm" href={link} target="_blank" rel="noopener"><Icon name="pin" size={16} /> Abrir en Google Maps</a>
               {l.data.instagram && (
-                <a class="btn btn-light btn-sm" href={l.data.instagram} target="_blank" rel="noopener"><Icon name="insta" size={18} /> Verlo en Instagram</a>
+                <a class="btn btn-light btn-sm" href={l.data.instagram} target="_blank" rel="noopener"><Icon name="insta" size={18} /> {esGuias ? 'Síguelo en Instagram' : 'Verlo en Instagram'}</a>
+              )}
+              {l.data.whatsapp && (
+                <a class="btn btn-primary btn-sm" href={`https://wa.me/${(() => { const d = l.data.whatsapp.replace(/\D/g, ''); return d.length === 10 ? '1' + d : d; })()}`} target="_blank" rel="noopener"><Icon name="whatsapp" size={18} /> Escríbele por WhatsApp</a>
               )}
             </div>
           </div>

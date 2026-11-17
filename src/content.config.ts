@@ -44,6 +44,8 @@ const lugares = defineCollection({
     mapsUrl: opcional,
     video: opcional,
     instagram: opcional,
+    // Número de WhatsApp (ej. 829-505-3476); sale como botón "Escríbele por WhatsApp"
+    whatsapp: opcional,
     consejo: opcional,
     favorito: z.coerce.number().int().min(0).max(3).optional().nullable().transform((v) => v ?? 0),
     borrador: z.boolean().optional().default(false),

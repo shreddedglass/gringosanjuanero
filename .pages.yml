@@ -127,6 +127,9 @@ content:
       - name: instagram
         label: Enlace del reel de Instagram (opcional; sale como botón "Verlo en Instagram")
         type: string
+      - name: whatsapp
+        label: WhatsApp (opcional, ej. 829-505-3476; sale como botón "Escríbele por WhatsApp")
+        type: string
       - name: consejo
         label: Consejo del gringo (opcional)
         type: text
