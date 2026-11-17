@@ -16,6 +16,8 @@ galeria:
 ubicacion: "Glamping Lake San Juan, Presa de Sabaneta, San Juan de la Maguana, República Dominicana"
 mapsUrl: ""
 video: ""
+instagram: "https://www.instagram.com/glampinglakesanjuan/"
+whatsapp: "+1-809-492-8118"
 consejo: "Pide la fogata para la noche y levántate temprano: ver el amanecer sobre el lago desde la cama del domo no tiene precio."
 favorito: 1
 ---
