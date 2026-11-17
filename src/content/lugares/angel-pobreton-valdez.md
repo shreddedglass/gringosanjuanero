@@ -5,9 +5,9 @@ pueblo: San Juan
 tipo:
   - Guía local
 resumen: "Juguetón, sanjuanero de pies a cabeza y una de las figuras más conocidas del pueblo. Con él se va a sanjuanear, y la pasas bien sí o sí."
-foto: "/images/lugares/angel-pobreton-salto-maguana.jpg"
+foto: "/images/lugares/angel-pobreton-palomino.jpg"
 galeria:
-  - "/images/lugares/angel-pobreton-palomino.jpg"
+  - "/images/lugares/angel-pobreton-salto-maguana.jpg"
   - "/images/lugares/angel-pobreton-grupo-rio.jpg"
   - "/video/lugares/angel-pobreton-video-1.mp4"
   - "/video/lugares/angel-pobreton-video-2.mp4"
