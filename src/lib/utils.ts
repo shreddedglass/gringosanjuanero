@@ -9,7 +9,7 @@ export async function getPosts() {
   return posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
-export async function getLugares(pagina?: 'explorar' | 'hospedarse' | 'comer') {
+export async function getLugares(pagina?: 'explorar' | 'hospedarse' | 'comer' | 'guias') {
   const all = await getCollection('lugares', ({ data }) => !data.borrador && (!pagina || data.pagina === pagina));
   return all.sort((a, b) => a.data.nombre.localeCompare(b.data.nombre, 'es'));
 }

@@ -85,7 +85,7 @@ content:
         type: select
         required: true
         options:
-          values: [explorar, hospedarse, comer]
+          values: [explorar, hospedarse, comer, guias]
       - name: pueblo
         label: Pueblo o provincia (sale como filtro "Lugar")
         type: string

@@ -54,6 +54,18 @@ p { margin: 0; }
 .main-nav a.nav-link:hover { background: #FFF0C9; }
 .main-nav a.nav-link[aria-current="page"] { background: var(--sol-claro); font-weight: 700; }
 .main-nav .btn { margin-left: 8px; white-space: nowrap; }
+/* Menú desplegable "Más" */
+.nav-mas { position: relative; }
+.nav-mas summary { list-style: none; cursor: pointer; padding: 10px 14px; border-radius: 999px; font-weight: 500; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.nav-mas summary::-webkit-details-marker { display: none; }
+.nav-mas summary::after { content: ''; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform .15s; }
+.nav-mas[open] summary::after { transform: rotate(-135deg) translateY(-2px); }
+.nav-mas summary:hover, .nav-mas[open] summary { background: #FFF0C9; }
+.nav-mas.activo summary { background: var(--sol-claro); font-weight: 700; }
+.nav-mas-menu { position: absolute; top: calc(100% + 8px); right: 0; min-width: 210px; background: #fff; border: 3px solid var(--tinta); border-radius: 18px; box-shadow: 5px 5px 0 var(--tinta); padding: 8px; display: flex; flex-direction: column; gap: 2px; z-index: 50; }
+.nav-mas-menu a { padding: 10px 14px; border-radius: 12px; text-decoration: none; color: var(--tinta); font-weight: 600; white-space: nowrap; }
+.nav-mas-menu a:hover { background: #FFF0C9; }
+.nav-mas-menu a[aria-current="page"] { background: var(--sol-claro); }
 /* Too narrow for one line: the menu moves to its own row under the logo */
 @media (max-width: 1140px) {
   .site-header { flex-direction: column; align-items: flex-start; gap: 14px; }
@@ -66,6 +78,8 @@ p { margin: 0; }
   .main-nav a.nav-link { padding: 8px 14px; font-size: 15px; background: #fff; border: 2px solid var(--tinta); }
   .main-nav a.nav-link[aria-current="page"] { background: var(--sol-claro); }
   .main-nav .btn { margin-left: 0; }
+  .nav-mas summary { padding: 8px 14px; font-size: 15px; background: #fff; border: 2px solid var(--tinta); }
+  .nav-mas-menu { left: 0; right: auto; }
   .main-nav .btn-sm { padding: 8px 16px; min-height: 40px; font-size: 15px; }
 }
 
@@ -107,6 +121,7 @@ p { margin: 0; }
 .ph { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-weight: 700; text-align: center; padding: 12px; }
 .ph-explorar { background: #CFE9E3; color: var(--rio-tinta); }
 .ph-alojamiento, .ph-hospedarse { background: var(--campo-claro); color: var(--campo-tinta); }
+.ph-guias { background: var(--azul-claro); color: var(--azul-tinta); }
 .ph-comida, .ph-comer { background: var(--barro-claro); color: var(--barro-tinta); }
 .ph-sol { background: var(--sol-claro); color: #6B4A00; }
 .cover { width: 100%; height: 100%; object-fit: cover; }

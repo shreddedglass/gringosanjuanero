@@ -30,7 +30,7 @@ const lugares = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/lugares' }),
   schema: z.object({
     nombre: z.string(),
-    pagina: z.enum(['explorar', 'hospedarse', 'comer']),
+    pagina: z.enum(['explorar', 'hospedarse', 'comer', 'guias']),
     pueblo: z.string(),
     // Uno o varios tipos (Salto, Río, Playa...). Acepta texto suelto o lista.
     tipo: z.union([z.string(), z.array(z.string())]).transform((v) => (Array.isArray(v) ? v : [v]).map((x) => x?.trim()).filter(Boolean) as string[]),

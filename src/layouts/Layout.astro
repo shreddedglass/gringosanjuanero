@@ -7,7 +7,7 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
-  active?: 'inicio' | 'explorar' | 'hospedarse' | 'comer' | 'blog' | 'contacto';
+  active?: 'inicio' | 'explorar' | 'hospedarse' | 'comer' | 'blog' | 'contacto' | 'guias';
   type?: 'website' | 'article';
   jsonld?: object;
 }
@@ -22,7 +22,12 @@ const nav = [
   { key: 'comer', label: 'Dónde Comer', href: '/donde-comer/' },
   { key: 'blog', label: 'Blog', href: '/blog/' },
 ];
-const footerNav = [{ key: 'inicio', label: 'Inicio', href: '/' }, ...nav, { key: 'contacto', label: 'Contacto', href: '/contacto/' }];
+// Páginas extra que van dentro del menú "Más"
+const masNav = [
+  { key: 'guias', label: 'Guías Locales', href: '/guias-locales/' },
+];
+const masActivo = masNav.some((n) => n.key === active);
+const footerNav = [{ key: 'inicio', label: 'Inicio', href: '/' }, ...nav, ...masNav, { key: 'contacto', label: 'Contacto', href: '/contacto/' }];
 const year = new Date().getFullYear();
 ---
 <!doctype html>
@@ -61,6 +66,12 @@ const year = new Date().getFullYear();
       {nav.map((n) => (
         <a class="nav-link" href={n.href} aria-current={active === n.key ? 'page' : undefined}>{n.label}</a>
       ))}
+      <details class:list={['nav-mas', { activo: masActivo }]}>
+        <summary>Más</summary>
+        <div class="nav-mas-menu">
+          {masNav.map((n) => <a href={n.href} aria-current={active === n.key ? 'page' : undefined}>{n.label}</a>)}
+        </div>
+      </details>
       <a class="btn btn-dark btn-sm" href="/contacto/" aria-current={active === 'contacto' ? 'page' : undefined}>Contacto</a>
     </nav>
   </header>
@@ -83,5 +94,11 @@ const year = new Date().getFullYear();
       <span class="copy">© {year} gringosanjuanero.com</span>
     </div>
   </footer>
+  <script>
+    // Cerrar el menú "Más" al tocar fuera o con Escape
+    const mas = document.querySelector<HTMLDetailsElement>('.nav-mas');
+    document.addEventListener('click', (e) => { if (mas?.open && !mas.contains(e.target as Node)) mas.open = false; });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && mas) mas.open = false; });
+  </script>
 </body>
 </html>

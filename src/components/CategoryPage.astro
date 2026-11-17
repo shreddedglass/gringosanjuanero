@@ -10,9 +10,10 @@ import site from '../data/site.json';
 import { getLugares, getPosts, mapsLink, mapsEmbed, PAGINA_A_ETIQUETA, NOMBRE_ETIQUETA } from '../lib/utils';
 
 interface Props {
-  pagina: 'explorar' | 'hospedarse' | 'comer';
+  pagina: 'explorar' | 'hospedarse' | 'comer' | 'guias';
   titulo: string;
   palabra: string;
+  antes?: string;
   intro: string;
   descripcion: string;
   color: string;
@@ -21,7 +22,7 @@ interface Props {
   seoArriba?: string;
   seoAbajo?: { titulo: string; parrafos: string[] };
 }
-const { pagina, titulo, palabra, intro, descripcion, color, formulario = false, seoTitulo, seoArriba, seoAbajo } = Astro.props;
+const { pagina, titulo, palabra, antes = 'Dónde', intro, descripcion, color, formulario = false, seoTitulo, seoArriba, seoAbajo } = Astro.props;
 
 const lugares = await getLugares(pagina);
 const items = await Promise.all(lugares.map(async (l) => ({ l, Content: (await render(l)).Content })));
@@ -46,8 +47,10 @@ const COLOR_TAG: Record<string, string> = {
   'río': 'azul', 'salto': 'rio', 'playa': 'sol',
   'barahona': 'azul', 'san juan de la maguana': 'campo', 'san juan': 'campo', 'azua': 'sol',
 };
-const colorDe = (t: string) => COLOR_TAG[t.trim().toLowerCase()] ?? (pagina === 'explorar' ? 'rio' : pagina === 'hospedarse' ? 'campo' : 'barro');
+const colorDe = (t: string) => COLOR_TAG[t.trim().toLowerCase()] ?? (pagina === 'explorar' ? 'rio' : pagina === 'hospedarse' ? 'campo' : pagina === 'guias' ? 'azul' : 'barro');
 const chipsDe = (l: (typeof lugares)[number]) => [...l.data.tipo, l.data.dificultad, ...l.data.etiquetas].filter(Boolean) as string[];
+const esGuias = pagina === 'guias';
+const [uno, varios] = esGuias ? ['guía', 'guías'] : ['lugar', 'lugares'];
 const rot = ['-1.5deg', '1deg', '-0.5deg'];
 
 const jsonld = {
@@ -129,7 +132,7 @@ const jsonld = {
 
   <section class="wrap title-row">
     <div>
-      <h1>Dónde <span>{palabra}</span></h1>
+      <h1>{antes} <span>{palabra}</span></h1>
       <p class="lead">{intro}</p>
     </div>
     <img class="face" src="/images/logo.png" alt="" width="150" />
@@ -170,8 +173,8 @@ const jsonld = {
 
   <section class="wrap sec" style="display: flex; flex-direction: column; gap: 32px;">
     <div style="display: flex; flex-direction: column; gap: 6px;">
-      <span class="eyebrow" style="color: var(--acc);">Todos los lugares</span>
-      <h2 class="h-section">Encuentra tu plan</h2>
+      <span class="eyebrow" style="color: var(--acc);">{esGuias ? 'Todos los guías' : 'Todos los lugares'}</span>
+      <h2 class="h-section">{esGuias ? 'Encuentra tu guía' : 'Encuentra tu plan'}</h2>
     </div>
 
     {lugares.length === 0 ? (
@@ -190,7 +193,7 @@ const jsonld = {
             </div>
           ))}
           <div class="fbar">
-            <span style="font-weight: 700;" aria-live="polite">Mostrando <span id="cuenta">{lugares.length}</span> <span id="cuenta-label">{lugares.length === 1 ? 'lugar' : 'lugares'}</span></span>
+            <span style="font-weight: 700;" aria-live="polite">Mostrando <span id="cuenta">{lugares.length}</span> <span id="cuenta-label" data-uno={uno} data-varios={varios}>{lugares.length === 1 ? uno : varios}</span></span>
             <button type="button" class="clear" id="quitar" hidden>Quitar filtros</button>
           </div>
         </div>
@@ -326,7 +329,7 @@ const jsonld = {
       });
       tags.forEach((b) => b.setAttribute('aria-pressed', String(sel.has(b.dataset.tag || ''))));
       if (cuenta) cuenta.textContent = String(n);
-      if (cuentaLabel) cuentaLabel.textContent = n === 1 ? 'lugar' : 'lugares';
+      if (cuentaLabel) cuentaLabel.textContent = n === 1 ? cuentaLabel.dataset.uno || '' : cuentaLabel.dataset.varios || '';
       if (quitar) quitar.hidden = sel.size === 0;
       if (vacio) vacio.hidden = n > 0;
     }

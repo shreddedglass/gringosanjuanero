@@ -1,0 +1,24 @@
+---
+import CategoryPage from '../components/CategoryPage.astro';
+const seoArriba = "¿Buscando guías turísticos en San Juan de la Maguana? Hay saltos, ríos y montañas en el Sur que no se deben hacer solo, y para eso están los guías locales. Aquí te presento a los guías en San Juan con los que yo mismo he caminado: gente que conoce cada sendero, cada charco y cada cruce de río, y que te lleva y te trae sano y salvo.";
+const seoAbajo = {
+  "titulo": "Guías locales y tours en San Juan de la Maguana y el Sur",
+  "parrafos": [
+    "Muchos de los mejores lugares del sur de República Dominicana no tienen letreros, ni caminos marcados, ni señal de teléfono. Por eso contratar un guía local en San Juan de la Maguana hace la diferencia: te ahorra perderte, te enseña rutas que no salen en Google y conoce el río cuando sube o cuando la corriente está fuerte. Rutas como el Salto San Pedro o la Presa de Palomino se deben hacer siempre con un guía con experiencia.",
+    "Los guías turísticos de esta lista organizan excursiones, senderismo y tours de ecoturismo en San Juan y en toda la región Sur. Todos son guías con los que he ido en persona. Escríbeles con tiempo, pregunta qué incluye el tour y cuánto dura la ruta, y si vas en grupo, avísales cuántos son. Apoyar a los guías locales también es apoyar a la gente de aquí."
+  ]
+};
+---
+<CategoryPage
+  seoTitulo="Guías turísticos en San Juan de la Maguana"
+  seoArriba={seoArriba}
+  seoAbajo={seoAbajo}
+  formulario
+  pagina="guias"
+  titulo="Guías Locales"
+  antes="Guías"
+  palabra="Locales"
+  color="#2563A8"
+  intro="Los guías de San Juan y del Sur que te llevan a los saltos, ríos y montañas que no se deben hacer solo. Todos los conozco en persona."
+  descripcion="Guías turísticos en San Juan de la Maguana: guías locales para saltos, ríos, senderismo y ecoturismo en el sur dominicano, recomendados por el Gringo Sanjuanero."
+/>
