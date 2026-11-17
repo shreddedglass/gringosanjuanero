@@ -17,10 +17,11 @@ interface Props {
   descripcion: string;
   color: string;
   formulario?: boolean;
+  seoTitulo?: string;
   seoArriba?: string;
   seoAbajo?: { titulo: string; parrafos: string[] };
 }
-const { pagina, titulo, palabra, intro, descripcion, color, formulario = false, seoArriba, seoAbajo } = Astro.props;
+const { pagina, titulo, palabra, intro, descripcion, color, formulario = false, seoTitulo, seoArriba, seoAbajo } = Astro.props;
 
 const lugares = await getLugares(pagina);
 const items = await Promise.all(lugares.map(async (l) => ({ l, Content: (await render(l)).Content })));
@@ -54,7 +55,7 @@ const jsonld = {
   itemListElement: lugares.map((l, i) => ({ '@type': 'ListItem', position: i + 1, name: l.data.nombre })),
 };
 ---
-<Layout title={`${titulo} en el Sur`} description={descripcion} active={pagina} jsonld={jsonld}>
+<Layout title={seoTitulo ?? `${titulo} en el Sur`} description={descripcion} active={pagina} jsonld={jsonld}>
   <style define:vars={{ acc: color }}>
     .title-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 32px; padding-top: 40px; padding-bottom: 40px; }
     .title-row > div { flex: 1 1 560px; display: flex; flex-direction: column; gap: 16px; }
