@@ -226,7 +226,17 @@ const jsonld = {
     )}
   </section>
 
-  {formulario && <NegocioForm pagina={titulo} />}
+  {formulario && (esGuias
+    ? <NegocioForm
+        pagina={titulo}
+        eyebrow="Para guías y agencias"
+        titulo="¿Eres guía o tienes una agencia?"
+        texto="Si llevas gente a conocer los saltos, ríos y montañas del Sur, escríbeme. Invítame a una de tus rutas y, si me gusta, te pongo en esta página y quizás hasta en un video."
+        nombreLabel="Tu nombre o el de tu agencia"
+        placeholder="Cuéntame qué rutas haces, en qué zona trabajas y cómo te contacta la gente."
+        boton="Enviar mensaje"
+      />
+    : <NegocioForm pagina={titulo} />)}
 
   {posts.length > 0 && (
     <section class="band-accent" style={`background: ${color}; padding: 80px 0;`}>
